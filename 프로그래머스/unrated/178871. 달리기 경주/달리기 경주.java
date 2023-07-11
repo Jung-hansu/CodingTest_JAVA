@@ -1,6 +1,6 @@
 import java.util.*;
 
-class Solution {
+class Solution{
     public String[] solution(String[] players, String[] callings){
         Map<String, Integer> rankMap = new HashMap<>();
         Map<Integer, String> playerMap = new HashMap<>();
