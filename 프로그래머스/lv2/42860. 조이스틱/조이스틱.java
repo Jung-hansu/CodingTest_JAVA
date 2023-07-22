@@ -12,8 +12,8 @@ class Solution {
             this.mv = mv;
         }
     }
+    
     public int solution(String name) {
-        Node tmp;
         int i = 0;
         
         len = name.length();
@@ -23,8 +23,11 @@ class Solution {
         return answer;
     }
     
+    //Queue에 해당 노드가 좌우로 움직일 경우 추가
+    //이름이 완성됐다면 answer 업데이트 후 return
     private void moveLR(Node node){
         int l, r, mvL = 0, mvR = 0;
+        
         for (l = node.idx; node.name.charAt(l) == 'A'; l = (l-1+len)%len)
             if (++mvL >= len){
                 answer = Math.min(answer, node.mv);
@@ -37,12 +40,11 @@ class Solution {
         q.add(moveUD(new Node(node.name, r, node.mv + mvR)));
     }
     
+    //해당 노드 상하 조작
     private Node moveUD(Node node){
-        Node res = new Node(node.name, node.idx, node.mv);
-        int c = (int)res.name.charAt(res.idx);
-        
-        res.name.setCharAt(res.idx, 'A');
-        res.mv += Math.min(c-'A', 'Z'-c+1);
-        return res;
+        int c = (int)node.name.charAt(node.idx);
+        node.name.setCharAt(node.idx, 'A');
+        node.mv += Math.min(c-'A', 'Z'-c+1);
+        return node;
     }
 }
