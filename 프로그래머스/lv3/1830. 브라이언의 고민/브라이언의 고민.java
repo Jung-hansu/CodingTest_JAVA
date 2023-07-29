@@ -30,9 +30,10 @@ class Solution {
 
 		while (!sb.toString().equals("")) {
 			s = parseWord();
-			System.out.println(s);
+
 			//Check rule 2
 			if (!isUpper(c = s.charAt(0))) {
+				//s.length() == 2 : consider the invalid cases like "aa"
 				if (used.contains(c) || s.charAt(s.length()-1) != c || s.length() == 2)
 					throw new Exception();
 				used.add(c);
@@ -76,23 +77,21 @@ class Solution {
 
 		//Parse with rule 1
 		if (!isUpper(c = sb.charAt(1))){
-			//When the word has only a character
 			int lowers = 1;
 			for (idx = 2; idx < sb.length(); idx++)
 				if (sb.charAt(idx) == c) lowers++;
-			if (lowers == 2){
-				ret = sb.substring(0, 1);
-				sb.delete(0, 1);
+			//lowers == 2 : When the word has only a character (ex. AaAa -> "A A")
+			//lowers != 2 : When the word has several characters (ex. AaBaCaD -> "ABCD")
+			if (lowers != 2) {
+				for (idx = 1; idx < sb.length() && sb.charAt(idx) == c; idx += 2) ;
+				ret = sb.substring(0, idx);
+				sb.delete(0, idx);
 				return new StringBuilder(ret);
 			}
-			//When the word has several characters
-			for (idx = 1; idx < sb.length() && sb.charAt(idx) == c; idx += 2);
-			ret = sb.substring(0, idx);
-			sb.delete(0, idx);
-			return new StringBuilder(ret);
 		}
 
 		//Parse with no rule
+		//Upper cases are always considered as only a character
 		ret = sb.substring(0, 1);
 		sb.delete(0, 1);
 		return new StringBuilder(ret);
