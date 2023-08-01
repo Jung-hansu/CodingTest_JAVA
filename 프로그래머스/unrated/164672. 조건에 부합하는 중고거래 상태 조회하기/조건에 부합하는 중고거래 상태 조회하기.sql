@@ -1,4 +1,3 @@
--- 코드를 입력하세요
 SELECT BOARD_ID, WRITER_ID, TITLE, PRICE,
     IF(B.STATUS = 'SALE', '판매중', IF (B.STATUS = 'RESERVED', '예약중', '거래완료'))
 FROM USED_GOODS_BOARD AS B
