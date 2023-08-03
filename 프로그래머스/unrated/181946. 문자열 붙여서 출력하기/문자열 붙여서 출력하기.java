@@ -1,7 +1,8 @@
-import java.io.*;
+import java.util.Scanner;
 
 public class Solution {
-    public static void main(String[] args) throws IOException {
-        System.out.println(new BufferedReader(new InputStreamReader(System.in)).readLine().replace(" ", ""));
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println(sc.next() + sc.next());
     }
 }
