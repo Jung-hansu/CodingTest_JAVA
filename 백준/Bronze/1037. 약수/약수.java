@@ -7,6 +7,7 @@ class Main{
 		br.readLine();
 		int[] commons = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
 
-		System.out.println(Arrays.stream(commons).min().getAsInt() * Arrays.stream(commons).max().getAsInt());
+		Arrays.sort(commons);
+		System.out.println(commons[0] * commons[commons.length-1]);
 	}
 }
