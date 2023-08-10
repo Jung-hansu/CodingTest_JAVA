@@ -14,8 +14,6 @@ public class Main {
 
     public static void main(String[] args) throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-        if (isPPAP(br.readLine())) System.out.println("PPAP");
-        else System.out.println("NP");
+        System.out.println(isPPAP(br.readLine()) ? "PPAP" : "NP");
     }
 }
