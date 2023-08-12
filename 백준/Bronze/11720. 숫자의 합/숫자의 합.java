@@ -1,10 +1,12 @@
 import java.io.*;
-import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        br.readLine();
-        System.out.println(Arrays.stream(br.readLine().split("")).mapToInt(Integer::parseInt).sum());
+        int N = Integer.parseInt(br.readLine()), sum = 0;
+        String s = br.readLine();
+
+        for (int i = 0; i < N; i++) sum += s.charAt(i)-'0';
+        System.out.println(sum);
     }
 }
