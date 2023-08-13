@@ -4,6 +4,7 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         List<Character> list = new ArrayList<>();
         Stack<Integer> stack = new Stack<>();
         int N = Integer.parseInt(br.readLine()), i = 1;
@@ -24,6 +25,10 @@ public class Main {
                 return;
             }
         }
-        for (char c : list) System.out.println(c);
+        for (int j = 0; j < list.size(); j++) {
+            if (j > 0 && j % 4000 == 0) bw.flush();
+            bw.write(list.get(j) + "\n");
+        }
+        bw.close();
     }
 }
