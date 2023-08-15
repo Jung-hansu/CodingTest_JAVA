@@ -9,14 +9,13 @@ public class Main {
 
         while (N-- > 0) {
             StringTokenizer st = new StringTokenizer(br.readLine());
-            switch (st.nextToken()) {
-                case "add" -> set |= (1 << Integer.parseInt(st.nextToken()));
-                case "remove" -> set &= ~(1 << Integer.parseInt(st.nextToken()));
-                case "check" -> bw.write(set / (1 << Integer.parseInt(st.nextToken())) % 2 + "\n");
-                case "toggle" -> set ^= (1 << Integer.parseInt(st.nextToken()));
-                case "all" -> set = (1 << 21) - 1;
-                default -> set = 0;
-            }
+            String s = st.nextToken();
+            if (s.equals("add")) set |= (1<<Integer.parseInt(st.nextToken()));
+            else if (s.equals("remove")) set &= ~(1<<Integer.parseInt(st.nextToken()));
+            else if (s.equals("check")) bw.write(set/(1<<Integer.parseInt(st.nextToken()))%2 + "\n");
+            else if (s.equals("toggle")) set ^= (1<<Integer.parseInt(st.nextToken()));
+            else if (s.equals("all")) set = (1<<21)-1;
+            else set = 0;
         }
         bw.close();
     }
