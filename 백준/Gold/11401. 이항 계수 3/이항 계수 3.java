@@ -20,6 +20,6 @@ public class Main {
         StringTokenizer st = new StringTokenizer(br.readLine());
         int N = Integer.parseInt(st.nextToken()), K = Integer.parseInt(st.nextToken());
 
-        System.out.println(combine(N, K));
+        System.out.println(combine(N, Math.min(K, N-K)));
     }
 }
