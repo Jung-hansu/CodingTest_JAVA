@@ -6,14 +6,12 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        Set<Integer> set = new HashSet<>();
-
+        BitSet bset = new BitSet();
+        
         while (st.hasMoreTokens()) {
             int n = Integer.parseInt(st.nextToken());
-            if (!set.contains(n)){
-                bw.write(n+" ");
-                set.add(n);
-            }
+            if (!bset.get(n)) bw.write(n+" ");
+            bset.set(n);
         }
         bw.close();
     }
