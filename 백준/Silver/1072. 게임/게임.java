@@ -7,7 +7,7 @@ public class Main {
         StringTokenizer st = new StringTokenizer(br.readLine());
         int X = Integer.parseInt(st.nextToken()), Y = Integer.parseInt(st.nextToken()), ans = 0;
 
-        if (100*Y/X >= 99) System.out.println(-1);
+        if (X==Y) System.out.println(-1);
         else{
             int l = 0, r = X+1;
             while (l < r){
