@@ -10,10 +10,9 @@ public class Main {
 
         for (int i = 0; i < N; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
-            arr[i] = new String[]{st.nextToken(), st.nextToken(), String.valueOf(i)};
+            arr[i] = new String[]{st.nextToken(), st.nextToken()};
         }
-        Arrays.sort(arr, (o1,o2) -> o1[0].equals(o2[0]) ?
-                Integer.parseInt(o1[2]) - Integer.parseInt(o2[2]) : Integer.parseInt(o1[0]) - Integer.parseInt(o2[0]));
+        Arrays.sort(arr, Comparator.comparing(o->Integer.parseInt(o[0])));
         for (String[] a : arr) bw.write(a[0]+" "+a[1]+"\n");
         bw.close();
     }
