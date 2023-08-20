@@ -8,7 +8,7 @@ public class Main {
         String s = br.readLine();
 
         for (int i = 0; i < L; i++)
-            hash = (hash + (s.charAt(i)-'a'+1)*(long)Math.pow(31, i)) % 1234567891;
+            hash = (hash + (s.charAt(i)-'a'+1)*(long)Math.pow(31, i) % 1234567891) % 1234567891;
         System.out.println(hash);
     }
 }
