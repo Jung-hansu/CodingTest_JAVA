@@ -18,10 +18,13 @@ public class Main {
     }
 
     //dfs를 돌면서 Trie 자료구조를 통해 단어 확인
-    private static Map<String, Integer> ans = new HashMap<>();
+    private static Map<String, List<Integer>> numbering = new HashMap<>();
+    private static int[] ans;
     private static final int[][] D = {{0, 1}, {1, 1}, {1, 0}, {1, -1}, {0, -1}, {-1, -1}, {-1, 0}, {-1, 1}};
     private static void dfs(char[][] field, Node node, int i, int j){
-        if (node.EOW) ans.put(node.s, ans.get(node.s)+1);
+        if (node.EOW)
+            for (int idx : numbering.get(node.s))
+                ans[idx]++;
         if (node.child.isEmpty()) return;
 
         for (int[] d : D){
@@ -40,14 +43,16 @@ public class Main {
         char[][] field = new char[N][M];
 
         //파싱
+        ans = new int[K];
         for (int i = 0; i < N; i++) {
             String s = br.readLine();
             for (int j = 0; j < M; j++)
                 field[i][j] = s.charAt(j);
         }
-        while(K-- > 0) {
+        for(int i = 0; i < K; i++) {
             String s = br.readLine();
-            ans.put(s, 0);
+            numbering.putIfAbsent(s, new ArrayList<>());
+            numbering.get(s).add(i);
             insert(s);
         }
 
@@ -58,7 +63,7 @@ public class Main {
                     dfs(field, root.child.get(field[i][j]), i, j);
 
         //출력
-        for (int num : ans.values())
+        for (int num : ans) 
             bw.write(num+"\n");
         bw.close();
     }
