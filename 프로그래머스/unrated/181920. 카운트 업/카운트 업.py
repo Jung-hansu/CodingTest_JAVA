@@ -1,0 +1,1 @@
+def solution(s,e): return [_ for _ in range(s,e+1)]
