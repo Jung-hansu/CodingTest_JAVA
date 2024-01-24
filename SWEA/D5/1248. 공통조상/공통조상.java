@@ -68,8 +68,8 @@ public class Solution {
             for (int i = 0; i < E; i++)
                 union(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
 
-            int res = getCommonAncestor1(A, B);
-//            int res = getCommonAncestor2(V, A, B);
+//            int res = getCommonAncestor1(A, B);
+            int res = getCommonAncestor2(V, A, B);
             sb.append('#').append(tc).append(' ').append(res).append(' ').append(subtreeSizes[res]).append('\n');
         }
         
