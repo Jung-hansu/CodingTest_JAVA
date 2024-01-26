@@ -1,28 +1,25 @@
 import java.io.*;
 import java.util.*;
 
+
 class Tree{
 
-    private class Node{
-        public Node lc, rc;
-    }
-
+    private final int SIZE;
     private int circuitCnt; //이동 횟수
     private int visitedCnt; //(중위 순회시)방문 노드 수
-    private int size;
-    private Node[] nodes;
+    private int[][] tree;
 
     public Tree(int size) {
-        this.size = size;
-        nodes = new Node[size + 1];
-
-        for (int i = 1; i <= size; i++)
-            nodes[i] = new Node();
+        SIZE = size;
+        tree = new int[size + 1][];
     }
 
+    /**
+     * tree[parent][0] : 왼쪽 자식
+     * tree[parent][1] : 오른쪽 자식
+     */
     public void addChildren(int parent, int lc, int rc) {
-        nodes[parent].lc = (lc > 0 ? nodes[lc] : null);
-        nodes[parent].rc = (rc > 0 ? nodes[rc] : null);
+        tree[parent] = new int[]{lc, rc};
     }
 
     /** 메인 알고리즘을 담은 Wrapping 메소드 */
@@ -31,25 +28,25 @@ class Tree{
         this.circuitCnt = -1;
         this.visitedCnt = 0;
 
-        pseudoInorderCircuit(nodes[1]);
+        pseudoInorderCircuit(1);
         return this.circuitCnt;
     }
 
     /** 메인 알고리즘 */
-    private void pseudoInorderCircuit(Node node){
-        if (node == null){
+    private void pseudoInorderCircuit(int node){
+        if (node < 0){
             return;
         }
 
         //들어갈 때 체크
         circuitCnt++;
-        
-        pseudoInorderCircuit(node.lc);
-        if (visitedCnt++ == size) return; //중위 순회 종료 조건
-        pseudoInorderCircuit(node.rc);
-        
+
+        pseudoInorderCircuit(tree[node][0]);
+        if (visitedCnt++ == SIZE) return; //중위 순회 종료 조건
+        pseudoInorderCircuit(tree[node][1]);
+
         //나갈 때 체크(순회 종료시 실행 X)
-        if (visitedCnt < size)
+        if (visitedCnt < SIZE)
             circuitCnt++;
     }
 
@@ -71,6 +68,7 @@ public class Main {
             tree.addChildren(parent, lc, rc);
         }
 
+        //answer
         System.out.println(tree.getCircuitCnt());
     }
 
