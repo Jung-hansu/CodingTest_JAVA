@@ -3,25 +3,31 @@ import java.math.BigInteger;
 
 public class Main {
 	
-	private static void getStrangePrime(BufferedWriter bw, int N, String num) throws IOException{
-		if (num.length() == N) {
-			bw.write(num);
+	private static int[] primeCandidates = {1, 3, 7, 9};
+	
+	private static void getStrangePrime(BufferedWriter bw, int N, String prime) throws IOException{
+		if (prime.length() == N) {
+			bw.write(prime);
 			bw.newLine();
 			return;
 		}
 		
-		for (int i = 0; i < 10; i++) {
-			if (new BigInteger(num + i).isProbablePrime(5))
-				getStrangePrime(bw, N, num + i);
+		for (int n : primeCandidates) {
+			if (new BigInteger(prime + n).isProbablePrime(5)) {
+				getStrangePrime(bw, N, prime + n);
+			}
 		}
 	}
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		String[] startPrime = {"2", "3", "5", "7"};
 		int N = br.read() - '0';
 		
-		getStrangePrime(bw, N, "");
+		for (String prime : startPrime) {
+			getStrangePrime(bw, N, prime);
+		}
 		bw.close();
 	}
 	
