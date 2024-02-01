@@ -11,7 +11,7 @@ public class Main {
 		}
 		
 		for (int i = 0; i < 10; i++) {
-			if (new BigInteger(num + i).isProbablePrime(10))
+			if (new BigInteger(num + i).isProbablePrime(5))
 				getStrangePrime(bw, N, num + i);
 		}
 	}
