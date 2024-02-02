@@ -7,12 +7,10 @@ public class Main {
 		Queue<Integer> q = new ArrayDeque<>();
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int N = Integer.parseInt(br.readLine());
-		Integer[] nums = new Integer[N];
-		
-		for (int i = 0; i < N; i++) {
-			nums[i] = i + 1;
+
+		for (int i = 1; i <= N; i++) {
+			q.add(i);
 		}
-		q.addAll(Arrays.asList(nums));
 		while (q.size() > 1) {
 			q.remove();
 			q.add(q.remove());
