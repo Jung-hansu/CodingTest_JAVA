@@ -26,7 +26,7 @@ class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         int V = Integer.parseInt(st.nextToken()), E = Integer.parseInt(st.nextToken()), cnt = 0;
-        int[][] edges =  new int[E][];
+        int[][] edges =  new int[E][3];
 
         //init parent
         parent = new int[V + 1];
@@ -37,10 +37,9 @@ class Main {
         //parsing edges
         for (int i = 0; i < E; i++) {
             st = new StringTokenizer(br.readLine());
-            int A = Integer.parseInt(st.nextToken()),
-                B = Integer.parseInt(st.nextToken()),
-                C = Integer.parseInt(st.nextToken());
-            edges[i] = new int[]{A, B, C};
+            edges[i][0] = Integer.parseInt(st.nextToken());
+            edges[i][1] = Integer.parseInt(st.nextToken());
+            edges[i][2]  = Integer.parseInt(st.nextToken());
         }
 
         Arrays.sort(edges, Comparator.comparingInt(o -> o[2]));
