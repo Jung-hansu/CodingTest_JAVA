@@ -1,21 +1,12 @@
 import java.io.*;
-import java.util.*;
 
 public class Main {
 
 	public static void main(String[] args) throws IOException {
-		Queue<Integer> q = new ArrayDeque<>();
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int N = Integer.parseInt(br.readLine());
 
-		for (int i = 1; i <= N; i++) {
-			q.add(i);
-		}
-		while (q.size() > 1) {
-			q.remove();
-			q.add(q.remove());
-		}
-		System.out.println(q.remove());
+		System.out.println(Integer.bitCount(N) == 1 ? Integer.highestOneBit(N) : (N ^ Integer.highestOneBit(N)) << 1);
 	}
 	
 }
