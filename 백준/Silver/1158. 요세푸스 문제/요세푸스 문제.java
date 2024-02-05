@@ -5,24 +5,20 @@ public class Main {
 	
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		Queue<Integer> q = new LinkedList<>();
+		List<Integer> list = new LinkedList<>();
 		StringBuilder sb = new StringBuilder();
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		int N = Integer.parseInt(st.nextToken()), M = Integer.parseInt(st.nextToken());
 		
 		for (int i = 1; i <= N; i++) {
-			q.add(i);
+			list.add(i);
 		}
 		
 		sb.append('<');
-		while (q.size() > 1) {			
-			for (int i = 0; i < M - 1; i++) {
-				q.add(q.remove());
-			}
-			sb.append(q.remove()).append(", ");
+		for (int num = M - 1; list.size() > 1; num = (num + M - 1) % list.size()) {
+			sb.append(list.remove(num)).append(", ");
 		}
-		
-		System.out.println(sb.append(q.remove()).append('>'));
+		System.out.println(sb.append(list.remove(0)).append('>'));
 	}
 	
 }
