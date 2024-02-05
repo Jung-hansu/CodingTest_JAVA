@@ -2,22 +2,36 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        Stack<int[]> stack = new Stack<>();
-        int N = Integer.parseInt(br.readLine());
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        int[] tops = new int[N+1], ans = new int[N];
 
-        for (int i = 1; i <= N; i++) tops[i] = Integer.parseInt(st.nextToken());
-        //스택의 값은 지금까지의 값들 중 내림차순인 부분수열 (현재 원소보다 큰 값들만 있도록)
-        for (int i = 1; i <= N; i++){
-            while (!stack.isEmpty() && stack.peek()[1] < tops[i]) stack.pop();
-            ans[i-1] = (stack.isEmpty() ? 0 : stack.peek()[0]);
-            stack.push(new int[]{i, tops[i]});
-        }
-        for (int n : ans) bw.write(n+" ");
-        bw.close();
-    }
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringBuilder sb = new StringBuilder();
+		Stack<int[]> stack = new Stack<>();
+		int N = Integer.parseInt(br.readLine());
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int[] towers = new int[N];
+
+		//parsing
+		for (int i = 0; i < N; i++) {
+			towers[i] = Integer.parseInt(st.nextToken());
+		}
+		
+		//run
+		for (int i = N - 1; i >= 0; i--) {
+			while (!stack.isEmpty() && stack.peek()[1] <= towers[i]) {
+				towers[stack.pop()[0]] = i + 1;
+			}
+			stack.push(new int[] {i, towers[i]});
+		}
+		while (!stack.isEmpty()) {
+			towers[stack.pop()[0]] = 0;
+		}
+		
+		//print
+		for (int n : towers) {
+			sb.append(n).append(' ');
+		}
+		System.out.println(sb);
+	}
+	
 }
