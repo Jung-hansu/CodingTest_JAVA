@@ -5,7 +5,7 @@ public class Main {
 	
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		List<Integer> list = new LinkedList<>();
+		List<Integer> list = new ArrayList<>();
 		StringBuilder sb = new StringBuilder();
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		int N = Integer.parseInt(st.nextToken()), M = Integer.parseInt(st.nextToken());
