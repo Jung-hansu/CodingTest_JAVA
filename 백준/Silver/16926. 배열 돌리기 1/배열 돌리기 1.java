@@ -21,7 +21,7 @@ public class Main {
 				int peel = Math.min(Math.min(i, N - i - 1), Math.min(j, M - j - 1));
 				int I = i, J = j;
 
-				for (int r = 0; r < R; r++) {
+				for (int r = 0; r < R % (2 * (N + M) - 4 - 8 * peel); r++) {
 					int d;
 					
 					if (J == peel && I != N - 1 - peel)
