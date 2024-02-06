@@ -4,23 +4,30 @@ import java.util.*;
 class Main {
 	
 	/** 해당 노드가 루트일 때의 네트워크 크기(subtree 노드 수) */
-	private static int[] networkSize;
-	private static int[] parent;
+	private static Map<String, Integer> networkSize;
+	private static Map<String, String> parent;
 	
 	/** Union 연산 후 합쳐진 네트워크 크기(tree 노드 수) 반환 */
-	private static int union(int a, int b) {
-		int x = find(a), y = find(b);
+	private static int union(String a, String b) {
+		String x = find(a), y = find(b);
 		
-		if (x == y) {
-			return networkSize[x];
+		if (x.compareTo(y) < 0) {
+			parent.put(y, x);
+			networkSize.put(x, networkSize.get(x) + networkSize.get(y));
+			return networkSize.get(x);
 		}
-		parent[Math.max(x, y)] = Math.min(x, y);
-		return networkSize[Math.min(x, y)] += networkSize[Math.max(x, y)];
+		if (x.compareTo(y) > 0) {
+			parent.put(x, y);
+			networkSize.put(y, networkSize.get(x) + networkSize.get(y));
+			return networkSize.get(y);
+		}
+		
+		return networkSize.get(x);
 	}
 	
-	private static int find(int x) {
-		if (parent[x] == x) return x;
-		return parent[x] = find(parent[x]);
+	private static String find(String x) {
+		if (parent.get(x) == x) return x;
+		return find(parent.get(x));
 	}
 	
 	public static void main(String[] args) throws IOException {
@@ -29,30 +36,20 @@ class Main {
 		int T = Integer.parseInt(br.readLine());
 		
 		while (T-- > 0) {
-			Map<String, Integer> map = new HashMap<>();
-			int F = Integer.parseInt(br.readLine()), cnt = 0;
+			int F = Integer.parseInt(br.readLine());
 			
-			//initialize
-			parent = new int[2 * F + 1];
-			networkSize = new int[2 * F + 1];
-			for (int i = 0; i <= 2 * F; i++) {
-				networkSize[i] = 1;
-				parent[i] = i;
-			}
-			
-			//union-find
+			networkSize = new HashMap<>();
+			parent = new HashMap<>();
 			for (int i = 0; i < F; i++) {
 				StringTokenizer st = new StringTokenizer(br.readLine());
 				String f1 = st.nextToken(), f2 = st.nextToken();
 				
-				if (!map.containsKey(f1)) {
-					map.put(f1, cnt++);
-				}
-				if (!map.containsKey(f2)) {
-					map.put(f2, cnt++);
-				}
+				networkSize.putIfAbsent(f1, 1);
+				networkSize.putIfAbsent(f2, 1);
+				parent.putIfAbsent(f1, f1);
+				parent.putIfAbsent(f2, f2);				
 				
-				sb.append(union(map.get(f1), map.get(f2))).append('\n');
+				sb.append(union(f1, f2)).append('\n');
 			}
 		}
 		
