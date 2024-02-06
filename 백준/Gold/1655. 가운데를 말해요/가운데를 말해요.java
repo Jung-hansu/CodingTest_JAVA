@@ -4,9 +4,9 @@ import java.util.*;
 public class Main {
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringBuilder sb = new StringBuilder();
 		PriorityQueue<Integer> minHeap = new PriorityQueue<>();
-		PriorityQueue<Integer> maxHeap = new PriorityQueue<>((o1, o2) -> o2 - o1);
+		PriorityQueue<Integer> maxHeap = new PriorityQueue<>(Comparator.reverseOrder());
 		int size = Integer.parseInt(br.readLine());
 
 		for (int i = 0; i < size; i++){
@@ -16,8 +16,8 @@ public class Main {
 				minHeap.offer(maxHeap.remove());
 				maxHeap.offer(minHeap.remove());
 			}
-			bw.write(maxHeap.element() + "\n");
+            sb.append(maxHeap.element()).append('\n');
 		}
-		bw.flush();
+		System.out.print(sb);
 	}
 }
