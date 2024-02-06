@@ -22,12 +22,16 @@ public class Main {
 				int I = i, J = j;
 
 				for (int r = 0; r < R; r++) {
-					int d = 0;
-					if (I == peel) d = 3;
-					if (J == peel) d = 0;
-					if (I == N - 1 - peel) d = 1;
-					if (J == M - 1 - peel) d = 2;
-					if (J == M - 1 - peel && I == peel) d = 3;
+					int d;
+					
+					if (J == peel && I != N - 1 - peel)
+						d = 0;
+					else if (I == N - 1 - peel && J != M - 1 - peel)
+						d = 1;
+					else if (J == M - 1 - peel && I != peel)
+						d = 2;
+					else
+						d = 3;
 					
 					I += D[d][0];
 					J += D[d][1];
