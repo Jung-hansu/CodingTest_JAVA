@@ -13,8 +13,7 @@ public class Main {
 			int x = Integer.parseInt(st.nextToken()), y = Integer.parseInt(st.nextToken());
 			
 			for (int i = 0; i < 10; i++) {
-				int sIdx = 100 * (x + i) + y;
-				paper.set(sIdx, sIdx + 10);
+				paper.set(100 * (x + i) + y, 100 * (x + i) + y + 10);
 			}
 		}
 		System.out.println(paper.cardinality());
