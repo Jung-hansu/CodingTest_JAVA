@@ -1,11 +1,1 @@
-import java.io.*;
-import java.util.*;
-
-class Main{
-	public static void main(String[] args) throws IOException{
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-
-		System.out.println(Double.parseDouble(st.nextToken())/Double.parseDouble(st.nextToken()));
-	}
-}
+import java.util.*;class Main{public static void main(String[]args){Scanner s=new Scanner(System.in);System.out.println(s.nextDouble()/s.nextDouble());}}
