@@ -7,12 +7,17 @@ class Main {
     private static List<Edge>[] adj;
     private static int[] dist;
 
-    private static class Vertex{
+    private static class Vertex implements Comparable<Vertex>{
         int v, dist;
 
         Vertex(int v, int dist){
             this.v = v;
             this.dist = dist;
+        }
+        
+        @Override
+        public int compareTo(Vertex v){
+            return this.dist - v.dist;
         }
     }
 
@@ -26,7 +31,7 @@ class Main {
     }
 
     private static void dijkstra(int V, int K){
-        Queue<Vertex> pq = new PriorityQueue<>(Comparator.comparingInt(v -> v.dist));
+        Queue<Vertex> pq = new PriorityQueue<>();
         BitSet check = new BitSet();
 
         dist[K] = 0;
