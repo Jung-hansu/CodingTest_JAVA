@@ -4,32 +4,52 @@ import java.util.*;
 class Main {
 
     private static final int INF = 1_000_000;
-    private static Map<Integer, Integer>[] adj;
+    private static List<Edge>[] adj;
     private static int[] dist;
 
+    private static class Vertex{
+        int v, dist;
+
+        Vertex(int v, int dist){
+            this.v = v;
+            this.dist = dist;
+        }
+    }
+
+    private static class Edge{
+        int to, cost;
+
+        Edge(int to, int cost){
+            this.to = to;
+            this.cost = cost;
+        }
+    }
+
     private static void dijkstra(int V, int K){
-        Queue<Integer> pq = new PriorityQueue<>(Comparator.comparingInt(o -> dist[o]));
+        Queue<Vertex> pq = new PriorityQueue<>(Comparator.comparingInt(v -> v.dist));
         BitSet check = new BitSet();
 
         dist[K] = 0;
-        pq.add(K);
-        for (int i = 0; !pq.isEmpty() && i < V - 1; i++) {
+        pq.add(new Vertex(K, 0));
+        for (int i = 0; !pq.isEmpty() && i < V; i++) {
             //이미 선택된 노드는 패스
-            while (!pq.isEmpty() && check.get(pq.element())){
+            while (check.get(pq.element().v)){
                 pq.remove();
-            }
-            if (pq.isEmpty()){
-                return;
+                if (pq.isEmpty()){
+                    return;
+                }
             }
             
             //선택 안된 노드중에서 가장 가까운 노드 선택
-            int minNode = pq.remove();
-            check.set(minNode);
+            Vertex minV = pq.remove();
+            check.set(minV.v);
+            dist[minV.v] = minV.dist;
 
-            //선택한 노드의 주변 노드 거리 업데이트
-            for (int node : adj[minNode].keySet()) {
-                dist[node] = Math.min(dist[node], dist[minNode] + adj[minNode].get(node));
-                pq.add(node);
+            //선택된 노드의 주변 노드 삽입
+            for (Edge edge : adj[minV.v]) {
+                if (!check.get(edge.to)) {
+                    pq.add(new Vertex(edge.to, dist[minV.v] + edge.cost));
+                }
             }
         }
     }
@@ -42,14 +62,14 @@ class Main {
             E = Integer.parseInt(st.nextToken()),
             K = Integer.parseInt(br.readLine());
 
-        //init dist
+        //init vertices
         dist = new int[V + 1];
         Arrays.fill(dist, INF);
 
         //init adj
-        adj = new Map[V + 1];
+        adj = new List[V + 1];
         for (int i = 1; i <= V; i++){
-            adj[i] = new HashMap<>();
+            adj[i] = new ArrayList<>();
         }
 
         //parse adj
@@ -59,10 +79,10 @@ class Main {
                 b = Integer.parseInt(st.nextToken()),
                 c = Integer.parseInt(st.nextToken());
 
-            //가장 작은 간선으로 업데이트
-            adj[a].put(b, Math.min(c, adj[a].getOrDefault(b, INF)));
+            adj[a].add(new Edge(b, c));
         }
 
+        //Dijkstra
         dijkstra(V, K);
 
         //print
