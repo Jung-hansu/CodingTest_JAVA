@@ -14,7 +14,7 @@ class Main {
             this.v = v;
             this.dist = dist;
         }
-        
+
         @Override
         public int compareTo(Vertex v){
             return this.dist - v.dist;
@@ -44,7 +44,7 @@ class Main {
                     return;
                 }
             }
-            
+
             //선택 안된 노드중에서 가장 가까운 노드 선택
             Vertex minV = pq.remove();
             check.set(minV.v);
@@ -59,13 +59,18 @@ class Main {
         }
     }
 
+    private static int readInt() throws IOException{
+        int c, res = 0;
+
+        while ((c = System.in.read()) > 32) {
+            res = (res << 3) + (res << 1) + (c & 15);
+        }
+        return res;
+    }
+
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringBuilder sb = new StringBuilder();
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        int V = Integer.parseInt(st.nextToken()),
-            E = Integer.parseInt(st.nextToken()),
-            K = Integer.parseInt(br.readLine());
+        int V = readInt(), E = readInt(), K = readInt();
 
         //init vertices
         dist = new int[V + 1];
@@ -79,10 +84,7 @@ class Main {
 
         //parse adj
         for (int i = 0; i < E; i++){
-            st = new StringTokenizer(br.readLine());
-            int a = Integer.parseInt(st.nextToken()),
-                b = Integer.parseInt(st.nextToken()),
-                c = Integer.parseInt(st.nextToken());
+            int a = readInt(), b = readInt(), c = readInt();
 
             adj[a].add(new Edge(b, c));
         }
