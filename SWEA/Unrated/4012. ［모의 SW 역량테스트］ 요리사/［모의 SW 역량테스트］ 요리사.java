@@ -7,8 +7,8 @@ public class Solution {
     private static int N, minDiff;
     private static int[][] synergy;
 
-    private static void combine(int idx, int num){
-        if (idx >= N / 2) {
+    private static void combine(int depth, int num){
+        if (depth >= N / 2) {
             int diff = 0;
 
             for (int i = 0; i < N - 1; i++){
@@ -16,8 +16,7 @@ public class Solution {
                     if (comb.get(i) ^ comb.get(j)) {
                         continue;
                     }
-                    //i, j가 같은 집합에 있을 때만 계산
-                    //1 집합이면 +, 0 집합이면 -하여 절댓값 구함 
+                    //i, j가 같은 집합에 있을 때만 차이 계산
                     diff += (synergy[i][j] + synergy[j][i]) * (comb.get(i) ? 1 : -1);
                 }
             }
@@ -26,9 +25,9 @@ public class Solution {
         }
 
         //N가지 중 N/2가지를 고르는 조합 구하기
-        for (int n = num; n <= N / 2 + idx; n++){
+        for (int n = num; n <= N / 2 + depth; n++){
             comb.set(n);
-            combine(idx + 1, n + 1);
+            combine(depth + 1, n + 1);
             comb.clear(n);
         }
     }
@@ -53,7 +52,8 @@ public class Solution {
             }
 
             //run
-            combine(0, 0);
+            //0을 선택하지 않는 경우만 세서 중복 예방
+            combine(0, 1);
             sb.append('#').append(tc).append(' ').append(minDiff).append('\n');
         }
         System.out.println(sb);
