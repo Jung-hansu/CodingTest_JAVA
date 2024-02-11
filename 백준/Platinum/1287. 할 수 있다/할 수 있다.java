@@ -62,12 +62,11 @@ public class Main {
     }
 
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String s = br.readLine();
-
+        int c;
+        
         //Parsing digit -> number -> expr
-        for (int i = 0; i < s.length(); i++){
-            Symbol tmp = new Symbol(s.charAt(i));
+        while ((c = System.in.read()) >= 0){
+            Symbol tmp = new Symbol((char) c);
             if (tmp.type == sym.DIGIT)
                 if (buf.isEmpty() || buf.get(buf.size()-1).type != sym.NUMBER){
                     tmp.setNum();
