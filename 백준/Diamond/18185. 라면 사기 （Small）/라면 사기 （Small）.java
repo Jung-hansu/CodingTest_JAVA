@@ -3,15 +3,21 @@ import java.util.*;
 
 public class Main {
 	
+    private static int readInt() throws IOException {
+        int c, res = 0;
+        
+        while ((c = System.in.read()) > 32)
+            res = (res << 3) + (res << 1) + (c & 15);
+        return res;
+    }
+    
 	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		int N = Integer.parseInt(br.readLine()), res = 0;
-		StringTokenizer st = new StringTokenizer(br.readLine());
+		int N = readInt(), res = 0;
 		int[] arr = new int[N];
 		
 		//parsing
 		for (int i = 0; i < N; i++)
-			arr[i] = Integer.parseInt(st.nextToken());
+			arr[i] = readInt();
 
 		for (int i = 0; i < N; i += (arr[i] == 0 ? 1 : 0)) {
 			/* skip zeros */
