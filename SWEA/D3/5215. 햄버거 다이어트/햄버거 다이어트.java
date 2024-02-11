@@ -6,7 +6,6 @@ public class Solution {
     private static int knapsack(int[][] foods, int N, int L){
         int[][] dp = new int[N + 1][L + 1];
 
-        Arrays.sort(foods, Comparator.comparingInt(o -> o[0]));
         for (int i = 1; i <= N; i++){
             int curFlavor = foods[i][0],
                 curCalorie = foods[i][1];
@@ -20,7 +19,7 @@ public class Solution {
                 }
             }
         }
-
+        
         return dp[N][L];
     }
 
