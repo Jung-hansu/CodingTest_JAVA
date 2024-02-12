@@ -1,102 +1,84 @@
 import java.io.*;
 import java.util.*;
 
-class Main {
 
-    private static final int INF = 1_000_000;
-    private static List<Edge>[] adj;
-    private static int[] dist;
+public class Main {
 
-    private static class Vertex implements Comparable<Vertex>{
-        int v, dist;
-
-        Vertex(int v, int dist){
-            this.v = v;
-            this.dist = dist;
+    static class Node implements Comparable<Node>{
+        int idx, cost;
+        Node (int idx, int cost) {
+            this.idx = idx; this.cost = cost;
         }
-
         @Override
-        public int compareTo(Vertex v){
-            return this.dist - v.dist;
+        public int compareTo(Node n) {
+            if (this.cost > n.cost) return 1;
+            else return -1;
         }
     }
 
-    private static class Edge{
-        int to, cost;
+    static int n, m, start_node;
+    static List<Node>[] neghibor;
+    static PriorityQueue<Node> pq = new PriorityQueue<Node>();
+    static int[] dist;
+    static BitSet bitset;
 
-        Edge(int to, int cost){
-            this.to = to;
-            this.cost = cost;
+    public static void main(String [] args) throws IOException {
+//		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+//		StringTokenizer st = new StringTokenizer(bf.readLine());
+        n = readInt();
+        m = readInt();
+        neghibor = new ArrayList[n];
+        dist = new int[n]; bitset = new BitSet(n);
+        Arrays.fill(dist, 3_000_000);
+        for (int i = 0; i < n; i++) {
+            neghibor[i] = new ArrayList<Node>();
         }
-    }
-
-    private static void dijkstra(int V, int K){
-        Queue<Vertex> pq = new PriorityQueue<>();
-        BitSet check = new BitSet();
-
-        dist[K] = 0;
-        pq.add(new Vertex(K, 0));
-        for (int i = 0; !pq.isEmpty() && i < V; i++) {
-            //이미 선택된 노드는 패스
-            while (check.get(pq.element().v)){
-                pq.remove();
-                if (pq.isEmpty()){
-                    return;
+        start_node = readInt()-1;
+        for (int i = 0; i < m; i++) {
+//			st = new StringTokenizer(bf.readLine());
+            int a = readInt()-1;
+            int b = readInt()-1;
+            int c = readInt();
+//            for (Node v : neghibor[a]) {
+//                if(v.idx == b) {if(c < v.cost) {v.cost = c;} continue;}
+//            }
+            neghibor[a].add(new Node(b, c));
+        }
+        pq.add(new Node(start_node, 0)); dist[start_node] = 0;
+        while (!pq.isEmpty()) { //
+            Node ele = pq.poll();
+//			System.out.println(Arrays.toString(dist));
+//			System.out.println(bitset.cardinality());
+            if (dist[ele.idx] < ele.cost) {continue;}
+            bitset.set(ele.idx);
+            if(bitset.cardinality() == n) {break;}
+            for (Node v : neghibor[ele.idx]) {
+                if (dist[v.idx] > ele.cost + v.cost) {
+                    dist[v.idx] = ele.cost + v.cost;
+                    pq.add(new Node(v.idx, dist[v.idx]));
                 }
             }
-
-            //선택 안된 노드중에서 가장 가까운 노드 선택
-            Vertex minV = pq.remove();
-            check.set(minV.v);
-            dist[minV.v] = minV.dist;
-
-            //선택된 노드의 주변 노드 삽입
-            for (Edge edge : adj[minV.v]) {
-                if (!check.get(edge.to)) {
-                    pq.add(new Vertex(edge.to, dist[minV.v] + edge.cost));
-                }
-            }
+//			System.out.println(Arrays.toString(dist));
         }
-    }
-
-    private static int readInt() throws IOException{
-        int c, res = 0;
-
-        while ((c = System.in.read()) > 32) {
-            res = (res << 3) + (res << 1) + (c & 15);
-        }
-        return res;
-    }
-
-    public static void main(String[] args) throws IOException {
         StringBuilder sb = new StringBuilder();
-        int V = readInt(), E = readInt(), K = readInt();
-
-        //init vertices
-        dist = new int[V + 1];
-        Arrays.fill(dist, INF);
-
-        //init adj
-        adj = new List[V + 1];
-        for (int i = 1; i <= V; i++){
-            adj[i] = new ArrayList<>();
-        }
-
-        //parse adj
-        for (int i = 0; i < E; i++){
-            int a = readInt(), b = readInt(), c = readInt();
-
-            adj[a].add(new Edge(b, c));
-        }
-
-        //Dijkstra
-        dijkstra(V, K);
-
-        //print
-        for (int i = 1; i <= V; i++){
-            sb.append(dist[i] < INF ? dist[i] : "INF").append('\n');
+        for (int i = 0; i < n; i++) {
+            if (dist[i] == 3_000_000) {sb.append("INF").append("\n");}
+            else {sb.append(dist[i]).append("\n");}
         }
         System.out.println(sb);
     }
 
+    static int readInt() throws IOException {
+        int n = 0;
+        boolean isNegative = false;
+        while (true) {
+            int input = System.in.read();
+            if (input<=32)
+                return isNegative ? n * -1 : n;
+            else if(input=='-')
+                isNegative = true;
+            else
+                n = (n<<3) + (n<<1) + (input&15);
+        }
+    }
 }
