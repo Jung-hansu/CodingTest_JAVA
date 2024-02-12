@@ -7,7 +7,7 @@ public class Main {
     private static final BitSet visited = new BitSet();
     private static boolean isCycle;
     private static int N, M;
-    private static String[] board;
+    private static char[][] board;
     private static int[][] dp;  //해당 좌표부터 끝까지의 최대 거리
 
     private static void dfs(int i, int j){
@@ -16,11 +16,11 @@ public class Main {
         //4방 탐색
         for (int[] d : D){
             //해당 방향의 다음 좌표
-            int I = i + d[0] * (board[i].charAt(j) - '0');
-            int J = j + d[1] * (board[i].charAt(j) - '0');
+            int I = i + d[0] * (board[i][j] & 15);
+            int J = j + d[1] * (board[i][j] & 15);
 
             //1. 다음 좌표가 맵 외부에 있는가? : 맵 탈출시 이 좌표에서부터의 최대 깊이는 1
-            if (I < 0 || J < 0 || I >= N || J >= M || board[I].charAt(J) == 'H') {
+            if (I < 0 || J < 0 || I >= N || J >= M || board[I][J] == 'H') {
                 dp[i][j] = Math.max(dp[i][j], 1);
                 continue;
             }
@@ -51,17 +51,29 @@ public class Main {
         return isCycle ? -1 : dp[0][0];
     }
 
-    public static void main(String[] args) throws IOException{
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
+    private static int readInt() throws IOException {
+        int c, n = 0;
+        while ((c = System.in.read()) > 32)
+            n = (n << 3) + (n << 1) + (c & 15);
+        return n;
+    }
 
-        N = Integer.parseInt(st.nextToken());
-        M = Integer.parseInt(st.nextToken());
-        board = new String[N];
+    private static char readChar() throws IOException{
+        int c = System.in.read();
+        if (c <= 32)
+            c = System.in.read();
+        return (char)c;
+    }
+
+    public static void main(String[] args) throws IOException{
+        N = readInt(); M = readInt();
+        board = new char[N][M];
         dp = new int[N][M];
 
         for (int i = 0; i < N; i++){
-            board[i] = br.readLine();
+            for (int j = 0; j < M; j++) {
+                board[i][j] = readChar();
+            }
         }
 
         System.out.println(getMaxDepth());
