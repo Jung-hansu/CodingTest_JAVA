@@ -4,14 +4,14 @@ import java.util.*;
 public class Main {
 
     private static final int[][] D = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
-    private static final BitSet visited = new BitSet();
+    private static long[] visited;
     private static boolean isCycle;
     private static int N, M;
     private static char[][] board;
     private static int[][] dp;  //해당 좌표부터 끝까지의 최대 거리
 
     private static void dfs(int i, int j){
-        visited.set(M * i + j);
+        visited[i] ^= 1L << j;
 
         //4방 탐색
         for (int[] d : D){
@@ -26,7 +26,7 @@ public class Main {
             }
 
             //2. Cycle이 존재하는가? : 존재시 표시 후 재귀 탈출
-            if (visited.get(M * I + J)){
+            if ((visited[I] & (1L << J)) > 0){
                 isCycle = true;
                 return;
             }
@@ -43,12 +43,7 @@ public class Main {
             dp[i][j] = Math.max(dp[i][j], dp[I][J] + 1);
         }
 
-        visited.clear(M * i + j);
-    }
-
-    private static int getMaxDepth(){
-        dfs(0, 0);
-        return isCycle ? -1 : dp[0][0];
+        visited[i] ^= 1L << j;
     }
 
     private static int readInt() throws IOException {
@@ -58,25 +53,20 @@ public class Main {
         return n;
     }
 
-    private static char readChar() throws IOException{
-        int c = System.in.read();
-        if (c <= 32)
-            c = System.in.read();
-        return (char)c;
-    }
-
     public static void main(String[] args) throws IOException{
         N = readInt(); M = readInt();
-        board = new char[N][M];
+        visited = new long[N];
+        board = new char[N][M + 1];
         dp = new int[N][M];
 
         for (int i = 0; i < N; i++){
-            for (int j = 0; j < M; j++) {
-                board[i][j] = readChar();
+            for (int j = 0; j <= M; j++) {
+                board[i][j] = (char)System.in.read();
             }
         }
 
-        System.out.println(getMaxDepth());
+        dfs(0, 0);
+        System.out.println(isCycle ? -1 : dp[0][0]);
     }
 
 }
