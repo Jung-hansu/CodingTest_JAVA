@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.*;
 
 class Solution {
 	
@@ -8,14 +9,15 @@ class Solution {
 		int T = Integer.parseInt(br.readLine());
 		
 		for (int tc = 1; tc <= T; tc++) {
-			String[] s = br.readLine().split(" ");
-			int N = s[0].length(), M = s[1].length();
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			String s1 = st.nextToken(), s2 = st.nextToken();
+			int N = s1.length(), M = s2.length();
 			int[][] dp = new int[N + 1][M + 1];
 
 			for (int i = 1; i <= N; i++) {
 				for (int j = 1; j <= M; j++) {
 					
-					if (s[0].charAt(i - 1) == s[1].charAt(j - 1)) {
+					if (s1.charAt(i - 1) == s2.charAt(j - 1)) {
 						dp[i][j] = dp[i - 1][j - 1] + 1;
 					}
 					else {
