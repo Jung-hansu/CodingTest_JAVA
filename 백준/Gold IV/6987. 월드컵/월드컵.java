@@ -4,7 +4,7 @@ import java.util.*;
 public class Main {
 	
 	/** 6C2 조합 */
-	private static List<int[]> _6C2 = new ArrayList<>();
+	private static List<int[]> _6C2 = new ArrayList<>(15);
 	
 	/** 경기 횟수 검사 */
 	private static boolean checkNumOfGames(int[][] scores) {
@@ -24,7 +24,7 @@ public class Main {
 		return scoreCnt[0] == scoreCnt[2] && scoreCnt[1] % 2 == 0;
 	}
 	
-	/** Backtracking */
+	/** 백트래킹 */
 	private static boolean isPossible(int[][] scores, int idx) {
 		if (idx == 15) {
 			for (int[] score : scores) {
@@ -38,35 +38,16 @@ public class Main {
 		int[] t1 = scores[_6C2.get(idx)[0]];
 		int[] t2 = scores[_6C2.get(idx)[1]];
 		
-		//t1 wins
-		if (t1[0] * t2[2] > 0) {
-			t1[0]--;
-			t2[2]--;
-			if (isPossible(scores, idx + 1)) {
-				return true;
+		for (int i = 0; i <= 2; i++) {
+			if (t1[i] * t2[2 - i] > 0) {
+				t1[i]--;
+				t2[2 - i]--;
+				if (isPossible(scores, idx + 1)) {
+					return true;
+				}
+				t2[2 - i]++;
+				t1[i]++;
 			}
-			t1[0]++;
-			t2[2]++;
-		}
-		//draw
-		if (t1[1] * t2[1] > 0) {
-			t1[1]--;
-			t2[1]--;
-			if (isPossible(scores, idx + 1)) {
-				return true;
-			}
-			t1[1]++;
-			t2[1]++;
-		}
-		//t1 loses
-		if (t1[2] * t2[0] > 0) {
-			t1[2]--;
-			t2[0]--;
-			if (isPossible(scores, idx + 1)) {
-				return true;
-			}
-			t1[2]++;
-			t2[0]++;
 		}
 		
 		return false;
