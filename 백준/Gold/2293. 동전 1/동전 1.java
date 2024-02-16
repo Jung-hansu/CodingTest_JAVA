@@ -2,17 +2,29 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
+
+    private static int getNumOfCases(int[] coins, int K){
+        int[] dp = new int[K + 1];
+
+        dp[0] = 1;
+        for(int coin : coins){
+            for (int i = coin; i <= K; i++){
+                dp[i] += dp[i - coin];
+            }
+        }
+        return dp[K];
+    }
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         int N = Integer.parseInt(st.nextToken()), K = Integer.parseInt(st.nextToken());
-        int[] coins = new int[N], dp = new int[10001];
+        int[] coins = new int[N];
 
-        dp[0] = 1;
-        for (int i = 0; i < N; i++) coins[i] = Integer.parseInt(br.readLine());
-        for (int coin : coins)
-            for (int i = coin; i <= K; i++)
-                dp[i] += dp[i-coin];
-        System.out.println(dp[K]);
+        for (int i = 0; i < N; i++){
+            coins[i] = Integer.parseInt(br.readLine());
+        }
+        System.out.println(getNumOfCases(coins, K));
     }
+
 }
