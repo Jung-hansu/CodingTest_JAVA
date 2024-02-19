@@ -3,6 +3,13 @@ import java.util.*;
 
 public class Main {
 
+    private static int readInt() throws IOException{
+        int c, n = 0;
+        while((c = System.in.read()) > 32)
+            n = (n << 3) + (n << 1) + (c & 15);
+        return n;
+    }
+    
     private static int binarySearch(int[] arr, int key, int size){
         int l = 0, r = size;
 
@@ -20,14 +27,12 @@ public class Main {
     }
 
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int N = Integer.parseInt(br.readLine());
+        int N = readInt();
 
         /** input arr */
         int[] arr = new int[N];
-        StringTokenizer st = new StringTokenizer(br.readLine());
         for (int i = 0; i < N; i++){
-            arr[i] = Integer.parseInt(st.nextToken());
+            arr[i] = readInt();
         }
 
         /** 최장 증가 부분수열 기록 */
@@ -39,7 +44,7 @@ public class Main {
         for (int i = 1; i < N; i++){
             int idx = binarySearch(increase, arr[i], size);
             increase[idx] = arr[i];         //DP(LIS 기록)
-            dp_LIS[i] = idx + 1;            //해당 인덱스가 포함되는 LIS 최대 길이 기록
+            dp_LIS[i] = idx + 1;            //해당 인덱스(i)가 포함되는 LIS 최대 길이(idx+1) 기록
             size = Math.max(size, idx + 1); //이분탐색 범위 업데이트
         }
 
@@ -52,7 +57,7 @@ public class Main {
         for (int i = 1; i < N; i++){
             int idx = binarySearch(decrease, arr[N - i - 1], size);
             decrease[idx] = arr[N - i - 1]; //DP(LDS 기록)
-            dp_LDS[i] = idx + 1;            //해당 인덱스가 포함되는 LDS 최대 길이
+            dp_LDS[N - i - 1] = idx + 1;    //해당 인덱스(N-i-1)가 포함되는 LDS 최대 길이(idx+1) 기록
             size = Math.max(size, idx + 1); //이분탐색 범위 업데이트
         }
 
@@ -60,7 +65,7 @@ public class Main {
         int maxLen = 0;
         for (int i = 0; i < N; i++){
             //i: 증가에서 감소로 바뀌는 부분
-            maxLen = Math.max(maxLen, dp_LIS[i] + dp_LDS[N - i - 1] - 1);
+            maxLen = Math.max(maxLen, dp_LIS[i] + dp_LDS[i] - 1);
         }
         System.out.println(maxLen);
     }
