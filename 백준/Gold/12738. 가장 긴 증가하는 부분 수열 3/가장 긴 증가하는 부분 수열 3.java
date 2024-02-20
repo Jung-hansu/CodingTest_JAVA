@@ -1,21 +1,50 @@
 import java.io.*;
-import java.util.*;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int N = Integer.parseInt(br.readLine()), top = 0;
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        int[] arr = new int[N], lis = new int[N];
 
-        for (int i = 0; i < N; i++) arr[i] = Integer.parseInt(st.nextToken());
-        lis[0] = arr[0];
-        for (int n : arr)
-            if (n > lis[top]) lis[++top] = n;
-            else if (n < lis[top]) {
-                int pos = Arrays.binarySearch(lis, 0, top + 1, n);
-                lis[pos < 0 ? - pos - 1 : pos] = n;
+    private static int readInt() throws IOException{
+        int c, n = 0;
+        int flag = 1;
+
+        while((c = System.in.read()) > 32) {
+            if (c == '-') {
+                flag = -1;
+                continue;
             }
-        System.out.println(top + 1);
+            n = (n << 3) + (n << 1) + (c & 15);
+        }
+        return flag * n;
     }
+
+    private static int binarySearch(int[] arr, int key, int size){
+        int l = 0, r = size;
+
+        while (l < r){
+            int m = (l + r) / 2;
+
+            if (arr[m] >= key){
+                r = m;
+            }
+            else{
+                l = m + 1;
+            }
+        }
+        return r;
+    }
+
+    public static void main(String[] args) throws IOException {
+        int N = readInt();
+        int[] increase = new int[N];
+        int size = 1;
+
+        increase[0] = readInt();
+        for (int i = 1; i < N; i++){
+            int num = readInt();
+            int idx = binarySearch(increase, num, size);
+            increase[idx] = num;
+            size = Math.max(size, idx + 1);
+        }
+        System.out.println(size);
+    }
+
 }
