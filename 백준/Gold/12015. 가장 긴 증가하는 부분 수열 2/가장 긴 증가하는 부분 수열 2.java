@@ -1,21 +1,31 @@
 import java.io.*;
-import java.util.*;
+import java.util.Arrays;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int N = Integer.parseInt(br.readLine()), top = 0;
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        int[] arr = new int[N], lis = new int[N];
 
-        for (int i = 0; i < N; i++) arr[i] = Integer.parseInt(st.nextToken());
-        lis[0] = arr[0];
-        for (int n : arr)
-            if (n > lis[top]) lis[++top] = n;
-            else if (n < lis[top]) {
-                int pos = Arrays.binarySearch(lis, 0, top + 1, n);
-                lis[pos < 0 ? - pos - 1 : pos] = n;
-            }
-        System.out.println(top + 1);
+    private static int readInt() throws IOException{
+        int c, n = 0;
+
+        while((c = System.in.read()) > 32) {
+            n = (n << 3) + (n << 1) + (c & 15);
+        }
+        return n;
     }
+
+    public static void main(String[] args) throws IOException {
+        int N = readInt();
+        int[] increase = new int[N];
+        int size = 1;
+
+        increase[0] = readInt();
+        for (int i = 1; i < N; i++){
+            int num = readInt();
+            int idx = Arrays.binarySearch(increase, 0, size, num);
+            if (idx < 0) idx = - idx - 1;
+            increase[idx] = num;
+            size = Math.max(size, idx + 1);
+        }
+        System.out.println(size);
+    }
+
 }
