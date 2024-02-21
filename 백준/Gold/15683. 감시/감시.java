@@ -3,29 +3,25 @@ import java.util.*;
 
 public class Main {
 	
+	private static final int[][] D = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+	private static final int[][][] SECTIONS = {
+			{{0}, {1}, {2}, {3}},
+			{{0, 2}, {1, 3}},
+			{{0, 1}, {1, 2}, {2, 3}, {3, 0}},
+			{{0, 1, 2}, {1, 2, 3}, {2, 3, 0}, {3, 0, 1}},
+			{{0, 1, 2, 3}}
+	};
+	
 	private static class CCTV {
 		int[] pos;
 		int[][] sections;
 		
 		CCTV(int i, int j){
-			int num = field[i][j];
-			
-			pos = new int[] {i, j};
-			if (num == 1) {
-				sections = new int[][] {{0}, {1}, {2}, {3}};
-			} else if (num == 2) {
-				sections = new int[][] {{0, 2}, {1, 3}};
-			} else if (num == 3) {
-				sections = new int[][] {{0, 1}, {1, 2}, {2, 3}, {3, 0}};
-			} else if (num == 4) {
-				sections = new int[][] {{0, 1, 2}, {1, 2, 3}, {2, 3, 0}, {3, 0, 1}};
-			} else if (num == 5){
-				sections = new int[][] {{0, 1, 2, 3}};
-			}
+			this.pos = new int[] {i, j};
+			this.sections = SECTIONS[field[i][j] - 1];
 		}
 	}
 	
-	private static final int[][] D = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
 	private static List<CCTV> cctvs = new ArrayList<>();
 	private static int[][] field;
 	private static int N, M;
