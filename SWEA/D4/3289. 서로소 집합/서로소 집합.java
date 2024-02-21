@@ -42,12 +42,12 @@ public class Solution {
 					union(A, B);
 				}
 				else {
-					sb.append(find(A) == find(B) ? '1' : '0');
+					sb.append(find(A) == find(B) ? 1 : 0);
 				}
 			}
 			sb.append('\n');
 		}
-		System.out.println(sb);
+		System.out.print(sb);
 	}
 
 }
