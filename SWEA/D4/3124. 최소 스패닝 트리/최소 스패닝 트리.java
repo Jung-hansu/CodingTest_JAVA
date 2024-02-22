@@ -3,42 +3,28 @@ import java.util.*;
 
 public class Solution {
 	
-	private static List<Edge>[] adj;
-	
-	private static class Edge implements Comparable<Edge>{
-		int to, cost;
-
-		public Edge(int to, int cost) {
-			this.to = to;
-			this.cost = cost;
-		}
-		
-		@Override
-		public int compareTo(Edge e) {
-			return this.cost - e.cost;
-		}
-	}
+	private static List<int[]>[] adj;
 
 	private static long prim(int V) {
-		PriorityQueue<Edge> pq = new PriorityQueue<>();
+		PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(o -> o[1]));
 		BitSet selected = new BitSet();
 		long res = 0;
 		
 		selected.set(1);
-		for (Edge e : adj[1]) {
+		for (int[] e : adj[1]) {
 			pq.add(e);
 		}
 		
 		while(--V > 0) {
-			Edge edge;
+			int[] edge;
 			do {
 				edge = pq.remove();
-			} while (selected.get(edge.to));
+			} while (selected.get(edge[0]));
 			
-			res += edge.cost;
-			selected.set(edge.to);
-			for (Edge e : adj[edge.to]) {
-				if (!selected.get(e.to)) {
+			res += edge[1];
+			selected.set(edge[0]);
+			for (int[] e : adj[edge[0]]) {
+				if (!selected.get(e[0])) {
 					pq.add(e);
 				}
 			}
@@ -69,8 +55,8 @@ public class Solution {
 				int b = Integer.parseInt(st.nextToken());
 				int cost = Integer.parseInt(st.nextToken());
 			
-				adj[a].add(new Edge(b, cost));
-				adj[b].add(new Edge(a, cost));
+				adj[a].add(new int[] {b, cost});
+				adj[b].add(new int[] {a, cost});
 			}
 			
 			//run & print
