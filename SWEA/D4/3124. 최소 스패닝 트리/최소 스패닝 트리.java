@@ -19,6 +19,7 @@ public class Solution {
 	}
 	
 	private static int[] parent;
+	private static int[] size;
 	
 	private static boolean union(int a, int b) {
 		int x = find(a), y = find(b);
@@ -26,7 +27,14 @@ public class Solution {
 		if (x == y) {
 			return false;
 		}
-		parent[Math.max(x, y)] = Math.min(x, y);
+		
+		if (size[x] < size[y]) {
+			size[x] += size[y];
+			parent[x] = y;
+		} else {
+			size[y] += size[x];
+			parent[y] = x;
+		}
 		return true;
 	}
 	
@@ -63,8 +71,10 @@ public class Solution {
 			
 			//initialize parent
 			parent = new int[V + 1];
+			size = new int[V + 1];
 			for (int i = 1; i <= V; i++) {
 				parent[i] = i;
+				size[i] = 1;
 			}
 			
 			//parse edges
