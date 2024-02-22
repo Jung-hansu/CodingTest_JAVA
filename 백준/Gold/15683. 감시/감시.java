@@ -25,10 +25,12 @@ public class Main {
 	private static List<CCTV> cctvs = new ArrayList<>();
 	private static int[][] field;
 	private static int N, M;
-	private static int minBlank = Integer.MAX_VALUE;
+	private static int initBlank = 0, minBlank = Integer.MAX_VALUE;
 
 	/** 시야가 닿는 field 변경 **/
-	private static void setSight(int[] pos, int[] section, boolean flag) {
+	private static int setSight(int[] pos, int[] section, boolean flag) {
+		int filled = 0;
+		
 		for (int dir : section) {
 			int i = pos[0] + D[dir][0];
 			int j = pos[1] + D[dir][1];
@@ -36,34 +38,30 @@ public class Main {
 			while (i >= 0 && j >= 0 && i < N && j < M && field[i][j] < 6) {
 				//시야가 닿는 영역 표시(중복 횟수도 표시)
 				if (field[i][j] <= 0) {
+					if (field[i][j] == 0) {
+						filled++;
+					}
 					field[i][j] -= flag ? 1 : -1;
 				}
 				i += D[dir][0];
 				j += D[dir][1];
 			}
 		}
+		return filled;
 	}
 	
 	/** 모든 경우의 수 탐색 **/
-	private static void backtrack(int idx) {
+	private static void backtrack(int idx, int filled) {
 		if (idx == cctvs.size()) {
-			int blank = 0;
-			
-			for (int[] row : field) {
-				for (int e : row) {
-					if (e == 0)
-						blank++;
-				}
-			}
-			minBlank = Math.min(minBlank, blank);
+			minBlank = Math.min(minBlank, initBlank - filled);
 			return;
 		}
 		
 		//CCTV를 회전시키는 모든 경우 확인
 		CCTV cctv = cctvs.get(idx);
 		for (int[] section : cctv.sections) {
-			setSight(cctv.pos, section, true);
-			backtrack(idx + 1);
+			int tmp = setSight(cctv.pos, section, true);
+			backtrack(idx + 1, filled + tmp);
 			setSight(cctv.pos, section, false);
 		}
 	}
@@ -81,12 +79,15 @@ public class Main {
 			
 			for (int j = 0; j < M; j++) {
 				field[i][j] = Integer.parseInt(st.nextToken());
-				if (field[i][j] > 0 && field[i][j] < 6)
+				if (field[i][j] == 0) {
+					initBlank++;
+				}
+				else if (field[i][j] < 6)
 					cctvs.add(new CCTV(i, j));
 			}
 		}
 		
-		backtrack(0);
+		backtrack(0, 0);
 		System.out.println(minBlank);
 	}
 	
