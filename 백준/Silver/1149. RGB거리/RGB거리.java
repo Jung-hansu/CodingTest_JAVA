@@ -1,21 +1,21 @@
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
-class Main{
-    public static void main(String[] args) throws IOException{
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int n = Integer.parseInt(br.readLine());
-        int[][] rgb = new int[n][];
-        
-        for (int i = 0; i < n; i++)
-            rgb[i] = Arrays.stream(br.readLine().split(" "))
-                           .mapToInt(Integer::parseInt)
-                           .toArray();
-        for (int i = 1; i < n; i++){
-            rgb[i][0] += Math.min(rgb[i-1][1], rgb[i-1][2]);
-            rgb[i][1] += Math.min(rgb[i-1][0], rgb[i-1][2]);
-            rgb[i][2] += Math.min(rgb[i-1][0], rgb[i-1][1]);
-        }
-        System.out.println(Arrays.stream(rgb[n-1]).min().getAsInt());
-    }
+public class Main {
+
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int N = Integer.parseInt(br.readLine());
+		int[][] dp = new int[N + 1][3];
+		
+		for (int i = 1; i <= N ;i++) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			dp[i][0] = Math.min(dp[i - 1][1], dp[i - 1][2]) + Integer.parseInt(st.nextToken());
+			dp[i][1] = Math.min(dp[i - 1][0], dp[i - 1][2]) + Integer.parseInt(st.nextToken());
+			dp[i][2] = Math.min(dp[i - 1][0], dp[i - 1][1]) + Integer.parseInt(st.nextToken());
+		}
+		
+		System.out.println(Math.min(dp[N][0], Math.min(dp[N][1], dp[N][2])));
+	}
+	
 }
