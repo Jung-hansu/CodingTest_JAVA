@@ -1,15 +1,24 @@
 import java.io.*;
+import java.util.*;
 
-public class Main {
-    public static void main(String[] args) throws IOException {
+class Main {
+
+    public static void main(String[] args) throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int N = Integer.parseInt(br.readLine()), M = Integer.parseInt(br.readLine()), idx = 0, cnt = 0;
-        String S = br.readLine(), P = "I"+"OI".repeat(N);
-
-        while ((idx = S.indexOf(P, idx)) >= 0) {
-            cnt++;
-            idx++;
+        int N = Integer.parseInt(br.readLine()), res = 0, idx = 0;
+        br.readLine();
+        String s = br.readLine(), IOI;
+        StringBuilder sb = new StringBuilder().append("I");
+        
+        for (int i = 0; i < N; i++) {
+        	sb.append("OI");
         }
-        System.out.println(cnt);
+        IOI = sb.toString();
+        
+        while((idx = s.indexOf(IOI, idx) + 1) > 0) {
+        	res++;
+        }
+        System.out.println(res);
     }
+
 }
