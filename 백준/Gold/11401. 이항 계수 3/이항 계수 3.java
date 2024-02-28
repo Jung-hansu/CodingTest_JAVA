@@ -15,10 +15,14 @@ public class Main {
         for (int i = 2; i <= k; i++) tmp2 = tmp2 * i % P;
         return (int)(tmp1 * pow(tmp2, P-2) % P);
     }
+    private static int readInt() throws IOException {
+        int c, n = 0;
+        while((c = System.in.read()) > 32)
+            n = (n << 3) + (n << 1) + (c & 15);
+        return n;
+    }
     public static void main(String[] args) throws IOException{
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        int N = Integer.parseInt(st.nextToken()), K = Integer.parseInt(st.nextToken());
+        int N = readInt(), K = readInt();
 
         System.out.println(combine(N, Math.min(K, N-K)));
     }
