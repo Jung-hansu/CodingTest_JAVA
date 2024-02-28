@@ -60,15 +60,9 @@ public class Main {
             union(a, b);
         }
 
-        //각 그룹별 최소 차수 노드(리프 및 준리프) 선정
-        Set<Integer> leaves = new HashSet<>();
-        for (int i = 0; i < N; i++){
-            leaves.add(find(i));
-        }
-
         //각 그룹별로 리프(및 준리프)부터 DFS 실행
-        for (int leaf : leaves) {
-            if (dfs(new boolean[N], leaf, 0)) {
+        for (int i = 0; i < N; i++) {
+            if (find(i) == i && dfs(new boolean[N], i, 0)) {
                 System.out.println(1);
                 return;
             }
