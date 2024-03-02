@@ -1,6 +1,69 @@
 import java.io.*;
 import java.util.*;
 
+class Heap{
+
+    int[] heap;
+    int size;
+    boolean isMinHeap;
+
+    public Heap(int maxSize, boolean isMinHeap){
+        heap = new int[Integer.highestOneBit(maxSize) << 1];
+        this.isMinHeap = isMinHeap;
+    }
+
+    public void add(int val){
+        heap[++size] = val;
+        percolateUp();
+    }
+
+    public int remove(){
+        percolateDown();
+        return heap[size--];
+    }
+
+    public int element(){
+        return heap[1];
+    }
+
+    private void swap(int x, int y){
+        heap[x] ^= heap[y];
+        heap[y] ^= heap[x];
+        heap[x] ^= heap[y];
+    }
+
+    private void percolateUp(){
+        int idx = size;
+
+        while (idx > 1 && (heap[idx] - heap[idx / 2]) * (isMinHeap ? 1 : -1) < 0){
+            swap(idx / 2, idx);
+            idx /= 2;
+        }
+    }
+
+    private void percolateDown(){
+        if (size == 1){
+            return;
+        }
+        int idx = 1;
+
+        swap(1, size);
+        while(2 * idx < size){
+            int nextChild = 2 * idx;
+            if (nextChild + 1 < size && (heap[nextChild + 1] - heap[nextChild]) * (isMinHeap ? 1 : -1) < 0){
+                nextChild += 1;
+            }
+
+            if ((heap[idx] - heap[nextChild]) * (isMinHeap ? 1 : -1) < 0){
+                break;
+            }
+            swap(idx, nextChild);
+            idx = nextChild;
+        }
+    }
+
+}
+
 public class Solution {
 
     public static void main(String[] args) throws IOException {
@@ -9,11 +72,11 @@ public class Solution {
         int T = Integer.parseInt(br.readLine());
 
         for (int tc = 1; tc <= T; tc++){
-            PriorityQueue<Integer> minHalf = new PriorityQueue<>(Comparator.reverseOrder());
-            PriorityQueue<Integer> maxHalf = new PriorityQueue<>();
             StringTokenizer st = new StringTokenizer(br.readLine());
             int N = Integer.parseInt(st.nextToken()), A = Integer.parseInt(st.nextToken());
             long sum = 0;
+            Heap minHalf = new Heap(2 * N, false);
+            Heap maxHalf = new Heap(2 * N, true);
 
             minHalf.add(A);
             for (int i = 0; i < N; i++){
