@@ -1,21 +1,23 @@
 import java.io.*;
 import java.util.*;
 
-class MinHeap{
+class MinHeap<T>{
 	
-	int[][] heap;
+	Comparator<T> comparator;
+	T[] heap;
 	int size;
 	
-	public MinHeap(int initialCapacity) {
-		heap = new int[initialCapacity + 1][];
+	public MinHeap(int initialCapacity, Comparator<T> comparator) {
+		this.heap = (T[])new Object[initialCapacity + 1];
+		this.comparator = comparator;
 	}
 	
-	public void add(int[] val) {
+	public void add(T val) {
 		heap[++size] = val;
 		percolateUp();
 	}
 	
-	public int[] remove() {
+	public T remove() {
 		percolateDown();
 		return heap[size--];
 	}
@@ -25,7 +27,7 @@ class MinHeap{
 	}
 	
 	private void swap(int x, int y) {
-		int[] tmp = heap[x];
+		T tmp = heap[x];
 		heap[x] = heap[y];
 		heap[y] = tmp;
 	}
@@ -33,7 +35,7 @@ class MinHeap{
 	private void percolateUp() {
 		int idx = size;
 		
-		while (idx > 1 && heap[idx][0] < heap[idx / 2][0]) {
+		while (idx > 1 && comparator.compare(heap[idx], heap[idx / 2]) < 0) {
 			swap(idx, idx / 2);
 			idx /= 2;
 		}
@@ -45,11 +47,11 @@ class MinHeap{
 		swap(1, size);
 		while (2 * idx < size) {
 			int minChild = 2 * idx;
-			if (minChild + 1 < size && heap[minChild + 1][0] < heap[minChild][0]) {
+			if (minChild + 1 < size && comparator.compare(heap[minChild + 1], heap[minChild]) < 0) {
 				minChild += 1;
 			}
 			
-			if (heap[idx][0] < heap[minChild][0]) {
+			if (comparator.compare(heap[idx], heap[minChild]) < 0) {
 				return;
 			}
 			swap(idx, minChild);
@@ -62,27 +64,29 @@ class MinHeap{
 public class Main {
 	
 	/** 각 컴퓨터의 {사용 종료 시간, 사용 횟수} 기록 */
-	private static List<int[]> computers = new ArrayList<>();
+	private static int[][] computers;
+	private static int computerCnt;
+//	private static List<int[]> computers = new ArrayList<>();
 	
 	private static void takeSeat(int[] timestamp) {
 		//기존 컴퓨터 중 사용 가능한 컴퓨터 탐색
-		for (int[] computer : computers) {
-			if (computer[0] <= timestamp[0]) {
-				computer[0] = timestamp[1];
-				computer[1]++;
+		for (int i = 0; i < computerCnt; i++) {
+			if (computers[i][0] <= timestamp[0]) {
+				computers[i][0] = timestamp[1];
+				computers[i][1]++;
 				return;
 			}
 		}
 
 		//앉을 자리가 없다면 새 컴퓨터 추가
-		computers.add(new int[] {timestamp[1], 1});
+		computers[computerCnt++] = new int[] {timestamp[1], 1};
 	}
 	
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringBuilder sb = new StringBuilder();
 		int N = Integer.parseInt(br.readLine());
-		MinHeap minHeap = new MinHeap(N);
+		MinHeap<int[]> minHeap = new MinHeap<>(N, Comparator.comparingInt(o -> o[0]));
 		
 		//parse inputs
 		for (int i = 0; i < N; i++) {
@@ -94,16 +98,17 @@ public class Main {
 		}
 		
 		//run
-		computers.add(new int[2]);
+		computers = new int[N][];
+		computers[computerCnt++] = new int[2];
 		while(!minHeap.isEmpty()) {
 			int[] timestamp = minHeap.remove();
 			takeSeat(timestamp);
 		}
 		
 		//print
-		sb.append(computers.size()).append('\n');
-		for (int[] computer : computers) {
-			sb.append(computer[1]).append(' ');
+		sb.append(computerCnt).append('\n');
+		for (int i = 0; i < computerCnt; i++) {
+			sb.append(computers[i][1]).append(' ');
 		}
 		System.out.println(sb);
 	}
