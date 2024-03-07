@@ -19,7 +19,12 @@ public class Main {
         int M = Integer.parseInt(st.nextToken());
         int K = Integer.parseInt(st.nextToken());
         int preferSum = 0, minLevel = 0;
-        PriorityQueue<Beer> levelPq = new PriorityQueue<>(Comparator.comparingInt(b -> b.level));
+        PriorityQueue<Beer> levelPq = new PriorityQueue<>((o1, o2) -> {
+            if (o1.level == o2.level){
+                return o2.prefer - o1.prefer;
+            }
+            return o1.level - o2.level;
+        });
         PriorityQueue<Beer> preferPq = new PriorityQueue<>(Comparator.comparingInt(b -> b.prefer));
 
         for (int i = 0; i < K; i++){
