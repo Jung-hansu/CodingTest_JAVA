@@ -89,10 +89,10 @@ public class Main {
 	private static class Process{
 		static Process running;
 		
-		int n, begin, priority, runtime;
+		int pid, begin, priority, runtime;
 
-		public Process(int n, int begin, int priority, int runtime) {
-			this.n = n;
+		public Process(int pid, int begin, int priority, int runtime) {
+			this.pid = pid;
 			this.begin = begin;
 			this.priority = priority;
 			this.runtime = runtime;
@@ -100,45 +100,46 @@ public class Main {
 	}
 
 	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringBuilder sb = new StringBuilder();
-		int N = Integer.parseInt(br.readLine());
+		int N = readInt();
 		Process[] processes = new Process[N + 1];
-		PriorityQueue<Process> minHeap = new PriorityQueue<>(N, new Comparator<Process>() {
+		Heap<Process> minHeap = new Heap<>(N, new Comparator<Process>() {
 
 			@Override
 			public int compare(Process p1, Process p2) {
-				//자동 에이징
+				//우선순위 + 대기시간 기준
 				if (p1.priority - p1.begin != p2.priority - p2.begin) {
 					return (p2.priority - p2.begin) - (p1.priority - p1.begin);
 				}
 				
+				//실행 시간 기준
 				if (p1.runtime != p2.runtime) {
 					return p1.runtime - p2.runtime;
 				}
 				
-				return p1.n - p2.n;
+				//프로세스 id 기준
+				return p1.pid - p2.pid;
 			}
 			
 		});
 
 		//parse processes
 		for (int pid = 1; pid <= N; pid++) {
-			StringTokenizer st = new StringTokenizer(br.readLine());
-			int begin = Integer.parseInt(st.nextToken());
-			int priority = Integer.parseInt(st.nextToken());
-			int runtime = Integer.parseInt(st.nextToken());
+			int begin = readInt();
+			int priority = readInt();
+			int runtime = readInt();
 			processes[pid] = new Process(pid, begin, priority, runtime);
 		}
 
 		//프로세스 실행
 		int time = 0, pid = 1;
-		
 		while (pid <= N || !minHeap.isEmpty()) {
 			//실행중인 프로세스가 끝나는 시간으로 점프
 			if (Process.running != null) {
 				time = Process.running.begin + Process.running.runtime;
-			} else if (pid <= N) {
+			}
+			//실행중인 프로세스가 없다면 다음 프로세스 요청 시간으로 점프
+			else if (pid <= N) {
 				time = Math.max(time, processes[pid].begin);
 			}
 			
@@ -150,7 +151,7 @@ public class Main {
 			//실행중인 프로세스가 없다면 프로세스 실행
 			if (Process.running == null && !minHeap.isEmpty()) {
 				Process.running = minHeap.remove();
-				sb.append(Process.running.n).append(' ');
+				sb.append(Process.running.pid).append(' ');
 			}
 			
 			//실행중인 프로세스가 있다면 Queuing
@@ -161,11 +162,20 @@ public class Main {
 				}
 				Process.running = minHeap.remove();
 				Process.running.begin = time;
-				sb.append(Process.running.n).append(' ');
+				sb.append(Process.running.pid).append(' ');
 			}
 		}
 		
 		System.out.println(sb);
+	}
+	
+	private static int readInt() throws IOException {
+		int c, n = 0;
+		
+		while ((c = System.in.read()) > 32) {
+			n = (n << 3) + (n << 1) + (c & 15);
+		}
+		return n;
 	}
 	
 }
