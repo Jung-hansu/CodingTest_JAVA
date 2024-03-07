@@ -82,20 +82,6 @@ class Heap<T> implements Iterable<T>{
 		};
 	}
 	
-	@Override
-	public String toString() {
-		if (isEmpty()) {
-			return "[]";
-		}
-		StringBuilder sb = new StringBuilder();
-		
-		sb.append('[');
-		for (int i = 1; i < size; i++) {
-			sb.append((T) heap[i]).append(',');
-		}
-		return sb.append((T) heap[size]).append(']').toString();
-	}
-	
 }
 
 public class Main {
@@ -111,15 +97,6 @@ public class Main {
 			this.priority = priority;
 			this.runtime = runtime;
 		}
-		
-		public void getAging(int time) {
-			this.priority += time;
-		}
-		
-		@Override
-		public String toString() {
-			return "("+n+" p:"+priority+", begin:"+begin+")";
-		}
 	}
 
 	public static void main(String[] args) throws IOException {
@@ -127,7 +104,7 @@ public class Main {
 		StringBuilder sb = new StringBuilder();
 		int N = Integer.parseInt(br.readLine());
 		Process[] processes = new Process[N + 1];
-		Heap<Process> minHeap = new Heap<>(N, new Comparator<Process>() {
+		PriorityQueue<Process> minHeap = new PriorityQueue<>(N, new Comparator<Process>() {
 
 			@Override
 			public int compare(Process p1, Process p2) {
@@ -158,7 +135,6 @@ public class Main {
 		int time = 0, pid = 1;
 		
 		while (pid <= N || !minHeap.isEmpty()) {
-
 			//실행중인 프로세스가 끝나는 시간으로 점프
 			if (Process.running != null) {
 				time = Process.running.begin + Process.running.runtime;
@@ -176,6 +152,7 @@ public class Main {
 				Process.running = minHeap.remove();
 				sb.append(Process.running.n).append(' ');
 			}
+			
 			//실행중인 프로세스가 있다면 Queuing
 			else if (Process.running != null && time >= Process.running.begin + Process.running.runtime) {
 				if (minHeap.isEmpty()) {
@@ -186,8 +163,6 @@ public class Main {
 				Process.running.begin = time;
 				sb.append(Process.running.n).append(' ');
 			}
-			
-//			System.out.println("time "+time+": "+Process.running+" "+minHeap);
 		}
 		
 		System.out.println(sb);
