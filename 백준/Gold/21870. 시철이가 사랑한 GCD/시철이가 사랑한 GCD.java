@@ -20,25 +20,24 @@ public class Main {
     private static int gcdAll(int start, int end){
         int res = arr[start];
 
-        for (int i = start + 1; i <= end; i++){
+        for (int i = start + 1; i < end; i++){
             res = gcd(res, arr[i]);
         }
-//        System.out.println(start+"~"+end+" "+res);
         return res;
     }
 
     private static void getMaxGcd(int l, int r, int gcdSum){
-        if (l >= r){
+        if (l >= r - 1){
             maxGcdSum = Math.max(maxGcdSum, gcdSum + arr[l]);
             return;
         }
 
-        int m = (l + r - 1) / 2;
+        int m = (l + r) / 2;
 
         //오른쪽 반 선택
-        getMaxGcd(l, m, gcdSum + gcdAll(m + 1, r));
+        getMaxGcd(l, m, gcdSum + gcdAll(m, r));
         //왼쪽 반 선택
-        getMaxGcd(m + 1, r, gcdSum + gcdAll(l, m));
+        getMaxGcd(m, r, gcdSum + gcdAll(l, m));
     }
 
     public static void main(String[] args) throws IOException {
@@ -51,7 +50,7 @@ public class Main {
             arr[i] = Integer.parseInt(st.nextToken());
         }
 
-        getMaxGcd(0, N - 1, 0);
+        getMaxGcd(0, N, 0);
         System.out.println(maxGcdSum);
     }
 
