@@ -1,39 +1,39 @@
 import java.io.*;
-import java.util.*;
 
 public class Main {
 
-    // ⌈x / y⌉ 계산
-    private static long ceilDiv(long x, long y){
-        long q = x / y;
+    private static int readInt() throws IOException {
+        int c, n = 0;
 
-        return (x == y || q * y == x) ? q : q + 1;
+        while ((c = System.in.read()) > 32) {
+            n = (n << 3) + (n << 1) + (c & 15);
+        }
+        return n;
+    }
+
+    private static long ceilDiv(long x, long y){
+        final long q = x / y;
+        return ((x ^ y) == 0 || q * y == x) ? q : q + 1;
     }
 
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        int N = Integer.parseInt(st.nextToken());
-        long heroAtk = Integer.parseInt(st.nextToken());
-        long heroHp = 0, minHp = 0;
+        int N = readInt();
+        long heroAtk = readInt(), heroHp = 1, maxHp = 1;
 
         for (int i = 0; i < N; i++){
-            st = new StringTokenizer(br.readLine());
-            int t = Integer.parseInt(st.nextToken());
-            int atk = Integer.parseInt(st.nextToken());
-            int hp = Integer.parseInt(st.nextToken());
+            int t = readInt(), atk = readInt(), hp = readInt();
 
             if (t == 1){
-                heroHp -= (ceilDiv(hp, heroAtk) - 1) * atk;
-                minHp = Math.min(minHp, heroHp);
+                heroHp += (ceilDiv(hp, heroAtk) - 1) * atk;
+                maxHp = Math.max(maxHp, heroHp);
             }
             else {
-                heroHp = Math.min(heroHp + hp, 0);
+                heroHp = Math.max(heroHp - hp, 1);
                 heroAtk += atk;
             }
         }
 
-        System.out.println(1 - minHp);
+        System.out.println(maxHp);
     }
 
 }
