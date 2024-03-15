@@ -3,6 +3,23 @@ import java.util.*;
 
 public class Main {
 
+    private static boolean binarySearch(int[] arr, int startIdx, int endIdx, int key) {
+        int l = startIdx, r = endIdx;
+
+        while (l < r){
+            int m = (l + r) / 2;
+
+            if (arr[m] < key){
+                l = m + 1;
+            } else if (arr[m] > key){
+                r = m;
+            } else{
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(br.readLine());
@@ -26,7 +43,7 @@ public class Main {
                     }
 
                     // 구간 이분탐색으로 사이에 있는 나머지 수 찾기
-                    if (Arrays.binarySearch(nums, n1, n3 + 1, n2) >= 0) {
+                    if (binarySearch(nums, n1, n3 + 1, n2)) {
                         System.out.println(nums[sumIdx]);
                         return;
                     }
