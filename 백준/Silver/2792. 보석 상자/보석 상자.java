@@ -10,8 +10,8 @@ public class Main {
         return q * y == x ? q : q + 1;
     }
 
-    private static int binarySearchByValue(int[] jewels){
-        int low = 1, high = jewels[M - 1];
+    private static int binarySearchByValue(int[] jewels, int max){
+        int low = 1, high = max;
 
         while (low < high){
             int mid = (low + high) / 2;
@@ -38,13 +38,13 @@ public class Main {
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
         int[] jewels = new int[M];
+        int max = 0;
 
         for (int i = 0; i < M; i++){
             jewels[i] = Integer.parseInt(br.readLine());
+            max = Math.max(max, jewels[i]);
         }
-        Arrays.sort(jewels);
-
-        System.out.println(binarySearchByValue(jewels));
+        System.out.println(binarySearchByValue(jewels, max));
     }
 
 }
