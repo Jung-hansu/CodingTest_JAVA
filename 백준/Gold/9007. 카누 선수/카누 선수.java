@@ -3,7 +3,7 @@ import java.util.*;
 
 public class Main {
 
-    private static int[] mix(int[] arr1, int[] arr2){
+    private static int[] combine(int[] arr1, int[] arr2){
         int[] ret = new int[arr1.length * arr2.length];
         int idx = 0;
 
@@ -24,19 +24,19 @@ public class Main {
         return 2L * K - x - y > 0 ? Math.max(x, y) : Math.min(x, y);
     }
 
-    private static int find(int[] mix1, int[] mix2, int K) {
+    private static int find(int[] comb1, int[] comb2, int K) {
         int res = Integer.MAX_VALUE;
 
-        Arrays.sort(mix2);
-        for (int n1 : mix1) {
-            int minSum, idx = binarySearch(mix2, K - n1);
+        Arrays.sort(comb2);
+        for (int n1 : comb1) {
+            int minSum, idx = binarySearch(comb2, K - n1);
 
             if (idx == 0){
-                minSum = n1 + mix2[idx];
-            } else if (idx == mix2.length){
-                minSum = n1 + mix2[idx - 1];
-            } else if (n1 + mix2[idx] != K){
-                minSum = compare(n1 + mix2[idx - 1], n1 + mix2[idx], K);
+                minSum = n1 + comb2[idx];
+            } else if (idx == comb2.length){
+                minSum = n1 + comb2[idx - 1];
+            } else if (n1 + comb2[idx] != K){
+                minSum = compare(n1 + comb2[idx - 1], n1 + comb2[idx], K);
             } else {
                 return K;
             }
@@ -46,28 +46,34 @@ public class Main {
         return res;
     }
 
+    private static int readInt() throws IOException {
+        int c, n = 0;
+        
+        while ((c = System.in.read()) > 32){
+            n = (n << 3) + (n << 1) + (c & 15);
+        }
+        return n;
+    }
+    
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringBuilder sb = new StringBuilder();
-        int T = Integer.parseInt(br.readLine());
+        int T = readInt();
 
-        for (int t = 0; t < T; t++) {
-            StringTokenizer st = new StringTokenizer(br.readLine());
-            int K = Integer.parseInt(st.nextToken());
-            int N = Integer.parseInt(st.nextToken());
-            int[][] arr = new int[4][N];
+        while (T-- > 0) {
+            int K = readInt(), N = readInt();
+            int[][] classes = new int[4][N];
 
-            for (int i = 0; i < 4; i++) {
-                st = new StringTokenizer(br.readLine());
-                for (int j = 0; j < N; j++) {
-                    arr[i][j] = Integer.parseInt(st.nextToken());
+            for (int[] cls : classes) {
+                for (int i = 0; i < N; i++) {
+                    cls[i] = readInt();
                 }
             }
 
-            int[] mix1 = mix(arr[0], arr[1]);
-            int[] mix2 = mix(arr[2], arr[3]);
-            sb.append(find(mix1, mix2, K)).append('\n');
+            int[] comb1 = combine(classes[0], classes[1]);
+            int[] comb2 = combine(classes[2], classes[3]);
+
+            sb.append(find(comb1, comb2, K)).append('\n');
         }
-        System.out.println(sb);
+        System.out.print(sb);
     }
 }
