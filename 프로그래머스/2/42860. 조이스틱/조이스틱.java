@@ -65,7 +65,7 @@ class Solution {
 
         //bfs
         q.add(new Node(chars, 0, 0));
-        for (int i = 0; i < notACnt; i++){
+        while (notACnt-- > 0){
             int size = q.size();
 
             while (size-- > 0){
@@ -86,4 +86,14 @@ class Solution {
         return answer;
     }
 
+}
+
+class Programmers {
+
+    public static void main(String[] args) {
+        Solution sol = new Solution();
+        String name = "JEROEN";
+
+        System.out.println(sol.solution(name));
+    }
 }
