@@ -4,45 +4,46 @@ import java.util.*;
 public class Main {
 
     private static final int INF = 1_000_000_000;
-    private static int[] active, cost;
-    private static int N, M;
 
-    private static int getMinCost(){
-        int[][] dp = new int[2][M + 1];
+    private static class App{
+        int memory, cost;
+        public App(int memory, int cost) {
+            this.memory = memory;
+            this.cost = cost;
+        }
+    }
 
-        Arrays.fill(dp[0], INF);
-        for (int i = 1; i <= N; i++){
-            for (int j = 1; j <= M; j++){
-                if (j <= active[i])
-                    dp[i&1][j] = Math.min(dp[i&1^1][j], cost[i]);
+    private static int getMinCost(App[] apps, int M){
+        int[] dp = new int[M + 1];
+
+        Arrays.fill(dp, INF);
+        for (App app : apps){
+            for (int j = M; j > 0; j--){
+                if (j <= app.memory)
+                    dp[j] = Math.min(dp[j], app.cost);
                 else
-                    dp[i&1][j] = Math.min(dp[i&1^1][j], dp[i&1^1][j - active[i]] + cost[i]);
+                    dp[j] = Math.min(dp[j], dp[j - app.memory] + app.cost);
             }
         }
-        return dp[N&1][M];
+        return dp[M];
     }
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        N = Integer.parseInt(st.nextToken());
-        M = Integer.parseInt(st.nextToken());
-        active = new int[N + 1];
-        cost = new int[N + 1];
+        StringTokenizer st1, st2 = new StringTokenizer(br.readLine());
+        int N = Integer.parseInt(st2.nextToken()), M = Integer.parseInt(st2.nextToken());
+        App[] apps = new App[N];
 
-        //parse active
-        st = new StringTokenizer(br.readLine());
-        for (int i = 1; i <= N; i++){
-            active[i] = Integer.parseInt(st.nextToken());
+        //parse input
+        st1 = new StringTokenizer(br.readLine());
+        st2 = new StringTokenizer(br.readLine());
+        for (int i = 0; i < N; i++){
+            int memory = Integer.parseInt(st1.nextToken());
+            int cost = Integer.parseInt(st2.nextToken());
+            apps[i] = new App(memory, cost);
         }
 
-        //parse cost
-        st = new StringTokenizer(br.readLine());
-        for (int i = 1; i <= N; i++) {
-            cost[i] = Integer.parseInt(st.nextToken());
-        }
-
-        System.out.println(getMinCost());
+        System.out.println(getMinCost(apps, M));
     }
 
 }
