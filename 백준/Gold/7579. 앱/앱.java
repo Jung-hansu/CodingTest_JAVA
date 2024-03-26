@@ -3,8 +3,6 @@ import java.util.*;
 
 public class Main {
 
-    private static final int INF = 1_000_000_000;
-
     private static class App{
         int memory, cost;
 
@@ -14,21 +12,23 @@ public class Main {
         }
     }
 
-    private static int getMinCost(App[] apps, int M){
-        int[] dp = new int[M + 1];
-        int sum = 0;
+    private static int getMinCost(App[] apps, int M, int totalCost){
+        int[] dp = new int[totalCost + 1];
+        int minCost = 0;
 
-        Arrays.fill(dp, INF);
         for (App app : apps){
-            sum += app.memory;
-            for (int i = Math.min(sum, M); i > 0; i--){
-                if (i <= app.memory)
-                    dp[i] = Math.min(dp[i], app.cost);
-                else
-                    dp[i] = Math.min(dp[i], dp[i - app.memory] + app.cost);
+            for (int i = totalCost; i >= app.cost; i--) {
+                dp[i] = Math.max(dp[i], dp[i - app.cost] + app.memory);
             }
         }
-        return dp[M];
+
+        for (int i = 1; i <= totalCost; i++){
+            if (dp[i] >= M){
+                minCost = i;
+                break;
+            }
+        }
+        return minCost;
     }
 
     public static void main(String[] args) throws IOException {
@@ -36,6 +36,7 @@ public class Main {
         StringTokenizer st1, st2 = new StringTokenizer(br.readLine());
         int N = Integer.parseInt(st2.nextToken());
         int M = Integer.parseInt(st2.nextToken());
+        int totalCost = 0;
         App[] apps = new App[N];
 
         //parse input
@@ -44,10 +45,11 @@ public class Main {
         for (int i = 0; i < N; i++){
             int memory = Integer.parseInt(st1.nextToken());
             int cost = Integer.parseInt(st2.nextToken());
+            totalCost += cost;
             apps[i] = new App(memory, cost);
         }
 
-        System.out.println(getMinCost(apps, M));
+        System.out.println(getMinCost(apps, M, totalCost));
     }
 
 }
