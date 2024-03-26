@@ -7,6 +7,7 @@ public class Main {
 
     private static class App{
         int memory, cost;
+
         public App(int memory, int cost) {
             this.memory = memory;
             this.cost = cost;
@@ -15,14 +16,16 @@ public class Main {
 
     private static int getMinCost(App[] apps, int M){
         int[] dp = new int[M + 1];
+        int sum = 0;
 
         Arrays.fill(dp, INF);
         for (App app : apps){
-            for (int j = M; j > 0; j--){
-                if (j <= app.memory)
-                    dp[j] = Math.min(dp[j], app.cost);
+            sum += app.memory;
+            for (int i = Math.min(sum, M); i > 0; i--){
+                if (i <= app.memory)
+                    dp[i] = Math.min(dp[i], app.cost);
                 else
-                    dp[j] = Math.min(dp[j], dp[j - app.memory] + app.cost);
+                    dp[i] = Math.min(dp[i], dp[i - app.memory] + app.cost);
             }
         }
         return dp[M];
@@ -31,7 +34,8 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st1, st2 = new StringTokenizer(br.readLine());
-        int N = Integer.parseInt(st2.nextToken()), M = Integer.parseInt(st2.nextToken());
+        int N = Integer.parseInt(st2.nextToken());
+        int M = Integer.parseInt(st2.nextToken());
         App[] apps = new App[N];
 
         //parse input
