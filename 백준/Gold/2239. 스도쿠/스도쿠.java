@@ -2,63 +2,73 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    private static int[][] sudoku = new int[9][9];
-    private static List<int[]> blanks = new ArrayList<>();
-    private static boolean found = false;
-    private static boolean isValid(int i, int j){
-        BitSet check;
+	
+	private static List<Integer> zeros = new ArrayList<>();
+	private static int[][] sudoku = new int[9][9];
+	private static int[] rows = new int[9];
+	private static int[] cols = new int[9];
+	private static int[] boxes = new int[9];
+	
+	private static void printSudoku() {
+		StringBuilder sb = new StringBuilder();
+		
+		for (int[] row : sudoku) {
+			for (int n : row)
+				sb.append(n);
+			sb.append('\n');
+		}
+		System.out.print(sb);
+	}
+	
+	private static void setNumber(int i, int j, int num) {
+		sudoku[i][j] = (sudoku[i][j] == 0 ? num : 0);
+		rows[i] ^= 1 << num - 1;
+		cols[j] ^= 1 << num - 1;
+		boxes[i / 3 * 3 + j / 3] ^= 1 << num - 1;
+	}
+	
+	private static boolean isSettable(int i, int j, int num) {
+		return (rows[i] & (1 << num - 1)) == 0 &&
+				(cols[j] & (1 << num - 1)) == 0 &&
+				(boxes[i / 3 * 3 + j / 3] & (1 << num - 1)) == 0;
+	}
+	
+	private static void backtrack(int depth) {
+		if (depth == zeros.size()) {
+			printSudoku();
+			System.exit(0);
+		}
+		
+		for (int n = 1; n <= 9; n++) {
+			int i = zeros.get(depth) / 9;
+			int j = zeros.get(depth) % 9;
+			if (isSettable(i, j, n)) {
+				setNumber(i, j, n);
+				backtrack(depth + 1);
+				setNumber(i, j, n);
+			}
+		}
+	}
 
-        //check row
-        check = new BitSet();
-        for (int k = 0; k < 9; k++)
-            if (check.get(sudoku[i][k])) return false;
-            else if (sudoku[i][k] != 0) check.set(sudoku[i][k]);
-        //check col
-        check = new BitSet();
-        for (int k = 0; k < 9; k++)
-            if (check.get(sudoku[k][j])) return false;
-            else if (sudoku[k][j] != 0) check.set(sudoku[k][j]);
-        //check box
-        check = new BitSet();
-        for (int I = (i/3)*3; I < (i/3)*3 + 3; I++)
-            for (int J = (j/3)*3; J < (j/3)*3 + 3; J++)
-                if (check.get(sudoku[I][J])) return false;
-                else if (sudoku[I][J] != 0) check.set(sudoku[I][J]);
-
-        return true;
-    }
-    private static void solveSudoku(int idx){
-        if (idx == blanks.size()){
-            found = true;
-            return;
-        }
-        int[] p = blanks.get(idx);
-        for (int i = 1; i <= 9; i++) {
-            sudoku[p[0]][p[1]] = i;
-            if (isValid(p[0], p[1])) {
-                solveSudoku(idx + 1);
-                if (found) return;
-            }
-            sudoku[p[0]][p[1]] = 0;
-        }
-    }
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
-
-        for (int i = 0; i < 9; i++){
-            String s = br.readLine();
-            for (int j = 0; j < 9; j++)
-                if ((sudoku[i][j] = Integer.parseInt(String.valueOf(s.charAt(j)))) == 0)
-                    blanks.add(new int[]{i, j});
-        }
-
-        solveSudoku(0);
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++)
-                sb.append(sudoku[i][j]);
-            sb.append('\n');
-        }
-        System.out.println(sb);
-    }
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		
+		for (int i = 0; i < 9; i++) {
+			String s = br.readLine();
+			for (int j = 0; j < 9; j++) {
+				sudoku[i][j] = s.charAt(j) & 15;
+				
+				if (sudoku[i][j] > 0) {
+					rows[i] |= 1 << sudoku[i][j] - 1;
+					cols[j] |= 1 << sudoku[i][j] - 1;
+					boxes[i / 3 * 3 + j / 3] |= 1 << sudoku[i][j] - 1;
+				} else {
+					zeros.add(i * 9 + j);
+				}
+				
+			}
+		}
+		backtrack(0);
+	}
+	
 }
