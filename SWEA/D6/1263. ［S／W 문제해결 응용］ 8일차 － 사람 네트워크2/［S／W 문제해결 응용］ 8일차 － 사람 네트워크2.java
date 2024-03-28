@@ -12,9 +12,7 @@ public class Solution {
             int cc = 0;
              
             for (int j = 0; j < N; j++) {
-            	if (i != j) {
-            		cc += adj[i][j];
-            	}
+        		cc += adj[i][j];
             }
             minCC = Math.min(minCC, cc);
         }
@@ -45,7 +43,7 @@ public class Solution {
             for (int i = 0; i < N; i++) {
                 for (int j = 0; j < N; j++) {
                     adj[i][j] = Integer.parseInt(split[i * N + j + 1]);
-                    if (adj[i][j] == 0) {
+                    if (i != j && adj[i][j] == 0) {
                         adj[i][j] = INF;
                     }
                 }
