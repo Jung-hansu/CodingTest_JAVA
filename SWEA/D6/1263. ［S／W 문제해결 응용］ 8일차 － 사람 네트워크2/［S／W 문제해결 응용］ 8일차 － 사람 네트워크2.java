@@ -22,13 +22,9 @@ public class Solution {
     }
      
     private static void floyd(int[][] adj, int N) {
-    	int a = 1;
         for (int k = 0; k < N; k++) {
             for (int i = 0; i < N; i++) {
                 for (int j = 0; j < N; j++) {
-                	if (adj[i][j] == INF) {
-                		a ++;
-            		}
             		adj[i][j] = Math.min(adj[i][j], adj[i][k] + adj[k][j]);
                 }
             }
