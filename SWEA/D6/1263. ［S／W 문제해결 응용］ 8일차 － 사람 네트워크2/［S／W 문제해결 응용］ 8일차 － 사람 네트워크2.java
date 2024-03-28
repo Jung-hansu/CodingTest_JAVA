@@ -8,8 +8,9 @@ public class Solution {
 	private static int floyd(int[][] adj, int N) {
 		for (int k = 0; k < N; k++) {
 			for (int i = 0; i < N; i++) {
+				if (i == k) continue;
 				for (int j = 0; j < N; j++) {
-					if (i != j) {
+					if (i != j && j != k) {
 						adj[i][j] = Math.min(adj[i][j], adj[i][k] + adj[k][j]);
 					}
 				}
