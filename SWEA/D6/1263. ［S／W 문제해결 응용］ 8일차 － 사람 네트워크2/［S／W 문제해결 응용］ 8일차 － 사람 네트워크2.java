@@ -27,9 +27,7 @@ public class Solution {
 			for (int k = 0; k < N; k++) {
 				for (int i = 0; i < N; i++) {
 					for (int j = 0; j < N; j++) {
-						if (i != j) {
-							adj[i][j] = Math.min(adj[i][k] + adj[k][j], adj[i][j]);
-						}
+						adj[i][j] = Math.min(adj[i][k] + adj[k][j], adj[i][j]);
 					}
 				}
 			}
