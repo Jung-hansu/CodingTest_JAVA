@@ -3,32 +3,6 @@ import java.io.*;
 public class Solution {
 	
 	private static final int INF = 1_000_000_000;
-	
-	private static int floyd(int[][] adj, int N) {
-		for (int k = 0; k < N; k++) {
-			for (int i = 0; i < N; i++) {
-				for (int j = 0; j < N; j++) {
-					if (i != j) {
-						adj[i][j] = Math.min(adj[i][j], adj[i][k] + adj[k][j]);
-					}
-				}
-			}
-		}
-		
-		int minCC = INF;
-		for (int[] row : adj) {
-			int cc = 0;
-			
-			for (int n : row) {
-				if (n < INF) {
-					cc += n;
-				}
-			}
-			minCC = Math.min(minCC, cc);
-		}
-		
-		return minCC;
-	}
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -43,13 +17,33 @@ public class Solution {
 			//generate adjacency matrix
 			for (int i = 0; i < N; i++) {
 				for (int j = 0; j < N; j++) {
-					if (i != j) {
-						adj[i][j] = split[i * N + j + 1].equals("1") ? 1 : INF;
+					adj[i][j] = split[i * N + j + 1].equals("1") ? 1 : INF;
+				}
+			}
+
+			//floyd-warshall
+			for (int k = 0; k < N; k++) {
+				for (int i = 0; i < N; i++) {
+					for (int j = 0; j < N; j++) {
+						if (i != j) {
+							adj[i][j] = Math.min(adj[i][j], adj[i][k] + adj[k][j]);
+						}
 					}
 				}
 			}
 			
-			sb.append('#').append(tc).append(' ').append(floyd(adj, N)).append('\n');
+			int minCC = INF;
+			for (int[] row : adj) {
+				int cc = 0;
+				
+				for (int n : row) {
+					if (n < INF) {
+						cc += n;
+					}
+				}
+				minCC = Math.min(minCC, cc);
+			}
+			sb.append('#').append(tc).append(' ').append(minCC).append('\n');
 		}
 		System.out.print(sb);
 	}
