@@ -1,5 +1,4 @@
 import java.io.*;
-import java.util.*;
 
 public class Solution {
 	
@@ -8,9 +7,8 @@ public class Solution {
 	private static int floyd(int[][] adj, int N) {
 		for (int k = 0; k < N; k++) {
 			for (int i = 0; i < N; i++) {
-				if (i == k) continue;
 				for (int j = 0; j < N; j++) {
-					if (i != j && j != k) {
+					if (i != j) {
 						adj[i][j] = Math.min(adj[i][j], adj[i][k] + adj[k][j]);
 					}
 				}
@@ -38,16 +36,15 @@ public class Solution {
 		int T = Integer.parseInt(br.readLine());
 
 		for (int tc = 1; tc <= T; tc++) {
-			StringTokenizer st = new StringTokenizer(br.readLine());
-			int N = Integer.parseInt(st.nextToken());
+			String[] split = br.readLine().split(" ");
+			int N = Integer.parseInt(split[0]);
 			int[][] adj = new int[N][N];
 			
 			//generate adjacency matrix
 			for (int i = 0; i < N; i++) {
 				for (int j = 0; j < N; j++) {
-					adj[i][j] = st.nextToken().equals("1") ? 1 : INF;
-					if (i == j) {
-						adj[i][j] = 0;
+					if (i != j) {
+						adj[i][j] = split[i * N + j + 1].equals("1") ? 1 : INF;
 					}
 				}
 			}
