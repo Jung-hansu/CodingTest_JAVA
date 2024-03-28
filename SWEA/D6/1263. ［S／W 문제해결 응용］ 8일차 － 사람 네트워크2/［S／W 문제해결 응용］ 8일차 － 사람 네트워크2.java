@@ -2,10 +2,8 @@ import java.io.*;
 
 public class Solution {
 	
-	private static final int INF = 1_000_000_000;
-	
 	private static int getMinCC(int[][] adj, int N) {
-		int minCC = INF;
+		int minCC = 1_000_000_000;
 		
 		floyd(adj, N);
 		for (int i = 0; i < N; i++) {
@@ -48,7 +46,7 @@ public class Solution {
 				for (int j = 0; j < N; j++) {
 					adj[i][j] = Integer.parseInt(split[i * N + j + 1]);
 					if (adj[i][j] == 0) {
-						adj[i][j] = INF;
+						adj[i][j] = 1_000_000_000;
 					}
 				}
 			}
