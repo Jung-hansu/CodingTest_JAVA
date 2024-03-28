@@ -4,9 +4,10 @@ public class Solution {
 	
 	private static final int INF = 1_000_000_000;
 	
-	private static int getMinCC(int[][] adj) {
+	private static int getMinCC(int[][] adj, int N) {
 		int minCC = INF;
 		
+		floyd(adj, N);
 		for (int[] row : adj) {
 			int cc = 0;
 			
@@ -43,18 +44,17 @@ public class Solution {
 			int[][] adj = new int[N][N];
 			
 			//generate adjacency matrix
-			int cnt = 1;
 			for (int i = 0; i < N; i++) {
 				for (int j = 0; j < N; j++) {
-					adj[i][j] = Integer.parseInt(split[cnt++]);
+					adj[i][j] = Integer.parseInt(split[i * N + j + 1]);
 					if (adj[i][j] == 0) {
 						adj[i][j] = INF;
 					}
 				}
 			}
 			
-			floyd(adj, N);
-			sb.append('#').append(tc).append(' ').append(getMinCC(adj)).append('\n');
+			int minCC = getMinCC(adj, N);
+			sb.append('#').append(tc).append(' ').append(minCC).append('\n');
 		}
 		System.out.print(sb);
 	}
