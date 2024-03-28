@@ -6,7 +6,7 @@ public class Main {
 	private static final int[][] D = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
 	private static List<Integer> water = new ArrayList<>();
 	private static int R, C;
-	private static int startIdx, endIdx;
+	private static int startIdx;
 	private static char[][] forest;
 	
 	private static void bfs() {
@@ -80,9 +80,7 @@ public class Main {
 				
 				forest[i][j] = line.charAt(j);
 				if (forest[i][j] == 'S')
-					startIdx = i * C + j; 
-				else if (forest[i][j] == 'D')
-					endIdx = i * C + j;
+					startIdx = i * C + j;
 				else if (forest[i][j] == '*')
 					water.add(i * C + j);
 				
