@@ -4,11 +4,10 @@ import java.util.*;
 public class Main {
 	
 	private static final int[][] D = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
-	private static final int INF = 1_000_000_000;
+	private static PriorityQueue<Edge> pq = new PriorityQueue<>();
 	private static int[][] field;
-	private static int[][] adj;
 	private static int[] parent;
-	private static int N, M;
+	private static int N, M, iNum;
 	
 	private static class Edge implements Comparable<Edge>{
 		int i1, i2;
@@ -66,31 +65,24 @@ public class Main {
 		}
 	}
 	
-	private static void generateAdjMatrix() {
+	private static void numberingIslands() {
 		boolean[][] visited = new boolean[N][M];
-		int iNum = 1;
 		
 		//islands numbering
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < M; j++) {
 				if (!visited[i][j] && field[i][j] == 1) {
-					bfs(visited, i, j, iNum++);
+					bfs(visited, i, j, ++iNum);
 				}
 			}
 		}
-		
+	}
+	
+	private static void generateAdjMatrix() {
 		//initialize parent
-		parent = new int[iNum];
-		for (int i = 0; i < iNum; i++) {
+		parent = new int[iNum + 1];
+		for (int i = 0; i <= iNum; i++) {
 			parent[i] = i;
-		}
-		
-		//initialize adj matrix
-		adj = new int[iNum][iNum];
-		for (int i = 0; i < iNum; i++) {
-			for (int j = 0; j < iNum; j++) {
-				adj[i][j] = INF;
-			}
 		}
 		
 		//generate adj matrix - row
@@ -102,7 +94,7 @@ public class Main {
 					int i2 = field[i][j];
 					
 					if (i1 > 0 && i1 != i2 && dist > 1) {
-						adj[i1][i2] = adj[i2][i1] = Math.min(adj[i1][i2], dist); 
+						pq.add(new Edge(i1, i2, dist));
 					}
 					i1 = i2;
 					dist = 0;
@@ -123,7 +115,7 @@ public class Main {
 					int i2 = field[i][j];
 					
 					if (i1 > 0 && i1 != i2 && dist > 1) {
-						adj[i1][i2] = adj[i2][i1] = Math.min(adj[i1][i2], dist); 
+						pq.add(new Edge(i1, i2, dist));
 					}
 					i1 = i2;
 					dist = 0;
@@ -137,17 +129,7 @@ public class Main {
 	}
 
 	private static int kruskal() {
-		PriorityQueue<Edge> pq = new PriorityQueue<>();
-		int iNum = adj.length, bitSet = 0, res = 0;
-		
-		//convert adj-matrix to edge-list
-		for (int i = 1; i < iNum - 1; i++) {
-			for (int j = i + 1; j < iNum; j++) {
-				if (adj[i][j] != INF) {
-					pq.add(new Edge(i, j, adj[i][j]));
-				}
-			}
-		}
+		int res = 0;
 		
 		//run kruskal
 		int edge = 0;
@@ -159,7 +141,7 @@ public class Main {
 				res += e.cost;
 			}
 			
-			if (edge == iNum - 2) {
+			if (edge == iNum - 1) {
 				return res;
 			}
 		}
@@ -181,6 +163,7 @@ public class Main {
 			}
 		}
 		
+		numberingIslands();
 		generateAdjMatrix();
 		System.out.println(kruskal());
 		
