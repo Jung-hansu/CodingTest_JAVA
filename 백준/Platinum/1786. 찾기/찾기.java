@@ -3,8 +3,9 @@ import java.util.*;
 
 public class Main {
 
-    private static List<Integer> res = new ArrayList<>();
+    private static StringBuilder sb = new StringBuilder();
     private static int[] table;
+    private static int cnt;
 
     private static void KMP(String s, String pattern) {
         int j = 0;
@@ -15,7 +16,8 @@ public class Main {
 
             if (s.charAt(i) == pattern.charAt(j)) {
                 if (j == pattern.length() - 1) {
-                    res.add(i - j + 1);
+                    sb.append(i - j + 1).append(' ');
+                    cnt++;
                     j = table[j];
                 } else {
                     j++;
@@ -26,7 +28,6 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
         String T = br.readLine(), P = br.readLine();
         int idx = 0;
 
@@ -39,14 +40,10 @@ public class Main {
                 table[i] = ++idx;
             }
         }
-        
+
         KMP(T, P);
 
-        sb.append(res.size()).append('\n');
-        for (int n : res) {
-            sb.append(n).append(' ');
-        }
-
+        System.out.println(cnt);
         System.out.println(sb);
     }
 
