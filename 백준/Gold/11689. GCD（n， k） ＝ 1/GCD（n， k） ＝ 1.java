@@ -20,8 +20,12 @@ public class Main {
     }
 
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        long N = Long.parseLong(br.readLine());
+        int c;
+        long N = 0;
+
+        while((c = System.in.read()) > 32){
+            N = (N << 3) + (N << 1) + (c & 15);
+        }
         System.out.println(eulerPhi(N));
     }
 
