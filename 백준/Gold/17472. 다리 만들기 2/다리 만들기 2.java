@@ -78,14 +78,14 @@ public class Main {
 		}
 	}
 	
-	private static void generateAdjMatrix() {
+	private static void generateEdgeList() {
 		//initialize parent
 		parent = new int[iNum + 1];
 		for (int i = 0; i <= iNum; i++) {
 			parent[i] = i;
 		}
 		
-		//generate adj matrix - row
+		//generate edge list - row
 		for (int i = 0; i < N; i++) {
 			int i1 = 0, dist = 0;
 			for (int j = 0; j < M; j++) {
@@ -106,7 +106,7 @@ public class Main {
 			}
 		}
 		
-		//generate adj matrix - col
+		//generate edge list - col
 		for (int j = 0; j < M; j++) {
 			int i1 = 0, dist = 0;
 			for (int i = 0; i < N; i++) {
@@ -164,7 +164,7 @@ public class Main {
 		}
 		
 		numberingIslands();
-		generateAdjMatrix();
+		generateEdgeList();
 		System.out.println(kruskal());
 		
 	}
