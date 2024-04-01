@@ -18,13 +18,14 @@ public class Solution {
 	}
 	
 	private static long combination(int N, int R) {
-		long res = 1;
+		long numer = 1, denom = 1;
 		
 		for (int r = 1; r <= R; r++) {
-			res = res * (N - r + 1) % P * pow(r) % P;
+			numer = numer * (N - r + 1) % P;
+			denom = denom * r % P;
 		}
 		
-		return res;
+		return numer * pow(denom) % P;
 	}
 
 	public static void main(String[] args) throws IOException {
