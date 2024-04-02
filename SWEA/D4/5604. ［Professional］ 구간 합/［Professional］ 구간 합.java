@@ -15,14 +15,14 @@ public class Solution {
     }
 
     private static long S(long N){
+        if (cache.containsKey(N)){
+            return cache.get(N);
+        }
         if (N < 10){
             return N > 0 ? sigma[(int)N] : 0;
         }
         if (isNines(N)){
             return 45L * ((long)Math.log10(N + 1)) * getDigit(N);
-        }
-        if (cache.containsKey(N)){
-            return cache.get(N);
         }
 
         long v = getDigit(N);
