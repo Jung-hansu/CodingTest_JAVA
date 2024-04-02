@@ -1,39 +1,48 @@
 import java.io.*;
-import java.util.*;
-import java.math.BigInteger;
+import java.util.StringTokenizer;
 
 public class Main {
-    private static long[] arr;
-    private static final int M = 1000000000;
-    private static void get2nFib(){
-        long a = arr[0], b = arr[1];
-        arr[0] = (a*a%M + b*b%M) % M;
-        arr[1] = (2*a*b%M + b*b%M) % M;
-    }
-    private static void getNextFib(){
-        long a = arr[0], b = arr[1];
-        arr[0] = b;
-        arr[1] = (a+b) % M;
-    }
-    private static long getFib(BigInteger N){
-        BitSet bs = new BitSet();
 
-        arr = new long[]{0, 1};
-        for (int i = 0; !N.equals(BigInteger.ZERO); i++, N = N.shiftRight(1))
-            if (N.mod(BigInteger.TWO).equals(BigInteger.ONE))
-                bs.set(i);
-        int highestBit = bs.length()-1;
-        for (int i = highestBit; i >= 0; i--) {
-            if (i < highestBit && bs.get(i)) getNextFib();
-            if (i > 0) get2nFib();
+    private static final int M = 1_000_000_000;
+
+    //arr => {A(2n-1), A(2n)}
+    private static void getDoubleFibo(long[] arr) {
+        long tmp1 = arr[0], tmp2 = arr[1];
+
+        arr[0] = (tmp1 * tmp1 % M + tmp2 * tmp2 % M) % M;
+        arr[1] = (2 * tmp1 * tmp2 % M + tmp2 * tmp2 % M) % M;
+    }
+
+    //arr => {A(n), A(n+1)}
+    private static void getNextFibo(long[] arr) {
+        long tmp1 = arr[0], tmp2 = arr[1];
+
+        arr[0] = tmp2;
+        arr[1] = (tmp1 + tmp2) % M;
+    }
+
+    private static long getFibo(long N){
+        long[] arr = {0, 1}; //{A(n-1), A(n)}
+
+        if (N <= 1){
+            return N;
+        }
+
+        for (long b = Long.highestOneBit(N) >> 1; b > 0; b >>= 1) {
+            getDoubleFibo(arr);
+            if ((N & b) > 0) {
+                getNextFibo(arr);
+            }
         }
         return arr[1];
     }
-    public static void main(String[] args) throws IOException{
+
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        BigInteger A = new BigInteger(st.nextToken()), B = new BigInteger(st.nextToken());
+        long A = Long.parseLong(st.nextToken()), B = Long.parseLong(st.nextToken());
 
-        System.out.println((getFib(B.add(BigInteger.TWO)) - getFib(A.add(BigInteger.ONE)) + M) % M);
+        System.out.println((getFibo(B + 2) - getFibo(A + 1) + M) % M);
     }
+
 }
