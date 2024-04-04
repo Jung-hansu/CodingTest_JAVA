@@ -1,35 +1,72 @@
 import java.io.*;
-import java.util.*;
+
+class Trie {
+
+    private final Node root = new Node();
+
+    private static class Node {
+        Node[] children = new Node[10];
+        boolean isEOW;
+    }
+
+    public boolean add(String s){
+        Node node = root;
+
+        for (int i = 0; i < s.length(); i++){
+            int num = s.charAt(i) - '0';
+
+            if (node.children[num] == null){
+                node.children[num] = new Node();
+            }
+            node = node.children[num];
+
+            //접두어가 있는지 확인
+            if (node.isEOW){
+                return false;
+            }
+        }
+        node.isEOW = true;
+
+        //접두어인지 확인
+        for (Node child : node.children){
+            if (child != null){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void clear(){
+        for (int i = 0; i < 10; i++){
+            root.children[i] = null;
+        }
+    }
+
+}
 
 public class Main {
-    static class Node {
-        Map<Character, Node> child = new HashMap<>();
-        boolean EOW;
-    }
-    static class Trie {
-        Node root = new Node();
-        boolean consistency = true;
 
-        void insert(String str){
-            Node node = root;
-            for(int i=0; i<str.length(); i++)
-                if (node.EOW) consistency = false;
-                else node = node.child.computeIfAbsent(str.charAt(i), key -> new Node());
-            if (!node.child.isEmpty()) consistency = false;
-            node.EOW = true;
-        }
-    }
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringBuilder sb = new StringBuilder();
         int T = Integer.parseInt(br.readLine());
+        Trie trie = new Trie();
 
-        while(T-- > 0) {
+        while (T-- > 0){
             int N = Integer.parseInt(br.readLine());
-            Trie trie = new Trie();
-            while (N-- > 0) trie.insert(br.readLine());
-            bw.write(trie.consistency ? "YES\n" : "NO\n");
+            boolean isConsistent = true;
+
+            trie.clear();
+            while (N -- > 0){
+                String line = br.readLine();
+
+                if (isConsistent){
+                    isConsistent = trie.add(line);
+                }
+            }
+            sb.append(isConsistent ? "YES\n" : "NO\n");
         }
-        bw.close();
+        System.out.print(sb);
     }
+
 }
