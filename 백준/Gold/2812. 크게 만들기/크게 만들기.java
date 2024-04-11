@@ -3,19 +3,22 @@ import java.util.*;
 
 public class Main {
 
+    private static int readInt() throws IOException{
+        int c, n = 0;
+
+        while ((c = System.in.read()) > 32){
+            n = (n << 3) + (n << 1) + (c & 15);
+        }
+        return n;
+    }
+
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
         Deque<Character> stack = new ArrayDeque<>();
         StringBuilder sb = new StringBuilder();
-        String num = br.readLine();
-        int N = Integer.parseInt(st.nextToken());
-        int K = Integer.parseInt(st.nextToken());
-        int idx = 0;
+        int N = readInt(), K = readInt();
+        char c;
 
-        while (idx < N && K > 0){
-            char c = num.charAt(idx++);
-
+        while ((c = (char)System.in.read()) > 32 && K > 0){
             if (stack.isEmpty()){
                 stack.addLast(c);
                 continue;
@@ -29,10 +32,14 @@ public class Main {
             stack.addLast(c);
         }
 
-        for (char c : stack){
-            sb.append(c);
+        for (char n : stack){
+            sb.append(n);
         }
-        sb.append(num.substring(idx));
+        if (c > 32) {
+            do {
+                sb.append(c);
+            } while ((c = (char)System.in.read()) > 32);
+        }
 
         System.out.println(K == 0 ? sb : sb.substring(0, sb.length() - K));
     }
