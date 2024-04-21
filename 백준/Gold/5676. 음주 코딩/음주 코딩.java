@@ -1,5 +1,4 @@
 import java.io.*;
-import java.util.*;
 
 class SegmentTree{
 
@@ -79,28 +78,48 @@ class SegmentTree{
 
 public class Main {
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
-        String s;
+    private static final StringBuilder sb = new StringBuilder();
 
-        while ((s = br.readLine()) != null) {
-            StringTokenizer st = new StringTokenizer(s);
-            int N = Integer.parseInt(st.nextToken());
-            int K = Integer.parseInt(st.nextToken());
+    private static char readChar() throws IOException{
+        char c = (char)System.in.read();
+        System.in.read();
+        return c;
+    }
+
+    private static int readInt() throws IOException{
+        int c, n = 0;
+        int flag = 1;
+
+        while ((c = System.in.read()) > 32){
+            if (c == '-'){
+                flag = -1;
+                continue;
+            }
+            n = (n << 3) + (n << 1) + (c & 15);
+        }
+
+        if (c < 0){
+            System.out.println(sb);
+            System.exit(0);
+        }
+
+        return flag * n;
+    }
+
+    public static void main(String[] args) throws IOException {
+        while (true) {
+            int N = readInt(), K = readInt();
             int[] arr = new int[N];
 
-            st = new StringTokenizer(br.readLine());
             for (int i = 0; i < N; i++) {
-                arr[i] = Integer.parseInt(st.nextToken());
+                arr[i] = readInt();
             }
 
             SegmentTree segmentTree = new SegmentTree(arr);
             for (int i = 0; i < K; i++) {
-                st = new StringTokenizer(br.readLine());
-                char a = st.nextToken().charAt(0);
-                int b = Integer.parseInt(st.nextToken());
-                int c = Integer.parseInt(st.nextToken());
+                char a = readChar();
+                int b = readInt();
+                int c = readInt();
 
                 if (a == 'C') {
                     segmentTree.update(b, c);
@@ -110,8 +129,6 @@ public class Main {
             }
             sb.append('\n');
         }
-
-        System.out.print(sb);
     }
 
 }
