@@ -1,5 +1,4 @@
 import java.io.*;
-import java.util.*;
 
 public class Main {
 
@@ -17,11 +16,18 @@ public class Main {
         }
     }
 
+    private static int readInt() throws IOException {
+        int c, n = 0;
+        
+        while ((c = System.in.read()) > 32){
+            n = (n << 3) + (n << 1) + (c & 15);
+        }
+        return n;
+    }
+    
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringBuilder sb = new StringBuilder();
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        int N = Integer.parseInt(st.nextToken()), M = Integer.parseInt(st.nextToken());
+        int N = readInt(), M = readInt();
 
         adj = new int[N + 1][N + 1];
         for (int i = 0; i <= N; i++){
@@ -31,19 +37,14 @@ public class Main {
         }
 
         for (int i = 1; i < N; i++){
-            st = new StringTokenizer(br.readLine());
-            int a = Integer.parseInt(st.nextToken());
-            int b = Integer.parseInt(st.nextToken());
-            int c = Integer.parseInt(st.nextToken());
+            int a = readInt(), b = readInt(), c = readInt();
             adj[a][b] = adj[b][a] = c;
         }
 
         floydWarshall();
 
         for (int i = 0; i < M; i++){
-            st = new StringTokenizer(br.readLine());
-            int a = Integer.parseInt(st.nextToken());
-            int b = Integer.parseInt(st.nextToken());
+            int a = readInt(), b = readInt();
             sb.append(adj[a][b]).append('\n');
         }
 
