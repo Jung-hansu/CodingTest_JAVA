@@ -3,7 +3,10 @@ import java.util.*;
 
 public class Main {
 
+
+
     private static int convertToMS(String timeFormat){
+        
         String[] time = timeFormat.split("[:.]");
         int h = Integer.parseInt(time[0]);
         int m = Integer.parseInt(time[1]);
@@ -24,7 +27,7 @@ public class Main {
             buses[i][1] = convertToMS(st.nextToken());
         }
 
-        Arrays.sort(buses, Comparator.comparingInt((int[] bus) -> bus[0]).thenComparingInt(bus -> bus[1]));
+        Arrays.sort(buses, Comparator.comparingInt(bus -> bus[0]));
         for (int i = 0; i < N; i++){
             while (!pq.isEmpty() && pq.element()[1] <= buses[i][0]){
                 pq.remove();
