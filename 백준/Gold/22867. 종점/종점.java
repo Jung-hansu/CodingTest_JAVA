@@ -3,28 +3,38 @@ import java.util.*;
 
 public class Main {
 
+    private static int readInt() throws IOException{
+        int c, n = 0;
 
+        while ((c = System.in.read()) > 32){
+            n = (n << 3) + (n << 1) + (c & 15);
+        }
+        return n;
+    }
 
-    private static int convertToMS(String timeFormat){
-        
-        String[] time = timeFormat.split("[:.]");
-        int h = Integer.parseInt(time[0]);
-        int m = Integer.parseInt(time[1]);
-        int s = Integer.parseInt(time[2]);
-        int ms = Integer.parseInt(time[3]);
-        return h * 60 * 60 * 1000 + m * 60 * 1000 + s * 1000 + ms;
+    private static int readTimeAsMs() throws IOException{
+        final int[] weight = {60 * 60 * 1000, 60 * 1000, 1000, 1};
+        int c, n = 0, w = 0, ms = 0;
+
+        while((c = System.in.read()) > 32){
+            if (Character.isDigit(c)) {
+                n = (n << 3) + (n << 1) + (c & 15);
+                continue;
+            }
+            ms += n * weight[w++];
+            n = 0;
+        }
+        return ms + n;
     }
 
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(o -> o[1]));
-        int N = Integer.parseInt(br.readLine()), maxSize = 0;
+        int N = readInt(), maxSize = 0;
         int[][] buses = new int[N][2];
 
         for (int i = 0; i < N; i++){
-            StringTokenizer st = new StringTokenizer(br.readLine());
-            buses[i][0] = convertToMS(st.nextToken());
-            buses[i][1] = convertToMS(st.nextToken());
+            buses[i][0] = readTimeAsMs();
+            buses[i][1] = readTimeAsMs();
         }
 
         Arrays.sort(buses, Comparator.comparingInt(bus -> bus[0]));
