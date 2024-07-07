@@ -1,27 +1,30 @@
 import java.io.*;
-import java.util.*;
 
 public class Main {
+    
+    private static int readInt() throws IOException {
+        int c, n = 0;
+        
+        while((c = System.in.read()) > 32){
+            n = (n << 3) + (n << 1) + (c & 15);
+        }
+        return n;
+    }
 
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringBuffer sb = new StringBuffer();
-        int N = Integer.parseInt(br.readLine());
+        int N = readInt();
         int[] isLeaf = new int[N + 1];
 
         for (int i = 1; i < N; i++) {
-            StringTokenizer st = new StringTokenizer(br.readLine());
-            int a = Integer.parseInt(st.nextToken());
-            int b = Integer.parseInt(st.nextToken());
+            int a = readInt(), b = readInt();
             isLeaf[a]++;
             isLeaf[b]++;
         }
 
-        int q = Integer.parseInt(br.readLine());
+        int q = readInt();
         for (int i = 0; i < q; i++) {
-            StringTokenizer st = new StringTokenizer(br.readLine());
-            int t = Integer.parseInt(st.nextToken());
-            int k = Integer.parseInt(st.nextToken());
+            int t = readInt(), k = readInt();
 
             if (t == 1){
                 sb.append(isLeaf[k] > 1 ? "yes\n" : "no\n");
