@@ -1,24 +1,28 @@
 import java.io.*;
-import java.util.*;
 
 public class Main {
 	
+	private static int readInt() throws IOException {
+		int c, n = 0;
+		while ((c = System.in.read()) > 32)
+			n = (n << 3) + (n << 1) + (c & 15);
+		return n;
+	}
+	
 	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		int N = Integer.parseInt(st.nextToken()), r = Integer.parseInt(st.nextToken()),
-			c = Integer.parseInt(st.nextToken()), res = 0;
+		int N = readInt(), r = readInt(), c = readInt(), res = 0;
 		
-		for (int n = 1 << N; n > 0; n /= 2) {
-			if (r >= n / 2) {
-				r -= n / 2;
-				res += n * n / 2;
+		while (N-- > 0) {
+			if (r >= (1 << N)) {
+				r -= (1 << N);
+				res += (1 << 2 * N + 1);
 			}
-			if (c >= n / 2) {
-				c -= n / 2;
-				res += n * n / 4;
+			if (c >= (1 << N)) {
+				c -= (1 << N);
+				res += (1 << 2 * N);
 			}
 		}
+		
 		System.out.println(res);
 	}
 	
