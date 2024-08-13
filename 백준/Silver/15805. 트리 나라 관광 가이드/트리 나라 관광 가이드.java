@@ -14,19 +14,13 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         StringBuilder sb = new StringBuilder();
-        int N = readInt();
+        int N = readInt(), prev = readInt();
         int[] parent = new int[N + 1 >> 1];
-        int[] arr = new int[N];
 
-        for (int i = 0; i < N; i++){
-            arr[i] = readInt();
-        }
-
-        int prev = arr[0];
         parent[prev] = -1;
         for (int i = 1; i < N; i++){
-            int cur = arr[i];
-
+            int cur = readInt();
+            
             if (cur != parent[prev]){
                 parent[cur] = prev;
             }
