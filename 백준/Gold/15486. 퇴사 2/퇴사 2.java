@@ -1,17 +1,23 @@
 import java.io.*;
-import java.util.*;
 
 public class Main {
+    
+    private static int readInt() throws IOException {
+        int c, n = 0;
+        
+        while((c = System.in.read()) > 32){
+            n = (n << 3) + (n << 1) + (c & 15);
+        }
+        return n;
+    }
 
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int N = Integer.parseInt(br.readLine());
+        int N = readInt();
         int[] dp = new int[N + 2];
 
         for (int i = 1; i <= N; i++){
-            StringTokenizer st = new StringTokenizer(br.readLine());
-            int term = Integer.parseInt(st.nextToken());
-            int cost = Integer.parseInt(st.nextToken());
+            int term = readInt();
+            int cost = readInt();
 
             dp[i + 1] = Math.max(dp[i + 1], dp[i]);
             if (i + term <= N + 1){
