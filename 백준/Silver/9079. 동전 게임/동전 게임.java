@@ -21,7 +21,7 @@ public class Main {
         casesOf.get(0).add(0b000_000_000);
         casesOf.get(0).add(0b111_111_111);
     }
-    
+
     private static void updateCases(){
         Set<Integer> prevSet = casesOf.get(casesOf.size() - 1);
         Set<Integer> nextSet = new HashSet<>();
@@ -35,13 +35,13 @@ public class Main {
     }
 
     private static int getMinOperationCount(int coins){
-        // 연산의 횟수는 최대 8개(연산의 개수)
-        for (int i = 0; i <= operations.length; i++){
+        // 연산의 횟수는 최대 4개(이후부터는 모두 중복)
+        for (int i = 0; i <= 4; i++){
             // Lazy 업데이트
             if (i == casesOf.size()){
                 updateCases();
             }
-            
+
             if (casesOf.get(i).contains(coins)){
                 return i;
             }
