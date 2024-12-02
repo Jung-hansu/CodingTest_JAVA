@@ -4,40 +4,30 @@ import java.util.*;
 public class Main {
 
     private static int[] bfs(List<Integer>[] adj){
-        PriorityQueue<Integer> pq = new PriorityQueue<>();
-        Queue<Integer> tmp = new ArrayDeque<>();
+        Deque<PriorityQueue<Integer>> pqs = new ArrayDeque<>();
         BitSet visited = new BitSet(adj.length);
-        int dest, dist = -1, cnt;
 
-        pq.add(1);
+        pqs.add(new PriorityQueue<>());
+        pqs.getLast().add(1);
         visited.set(1);
-        while (!pq.isEmpty()){
-            int size = pq.size();
+        while (true){
+            PriorityQueue<Integer> pq = pqs.getLast();
+            PriorityQueue<Integer> nextPq = new PriorityQueue<>();
 
-            dest = pq.element();
-            dist++;
-            cnt = size;
-            while (size-- > 0){
-                int cur = pq.remove();
-
+            pqs.add(nextPq);
+            for (int cur : pq){
                 for (int next : adj[cur]){
                     if (!visited.get(next)){
                         visited.set(next);
-                        tmp.add(next);
-                        dest = Math.min(dest, next);
+                        nextPq.add(next);
                     }
                 }
             }
 
-            if (tmp.isEmpty()){
-                return new int[]{dest, dist, cnt};
-            }
-
-            while (!tmp.isEmpty()){
-                pq.add(tmp.remove());
+            if (nextPq.isEmpty()){
+                return new int[]{pq.element(), pqs.size() - 2, pq.size()};
             }
         }
-        return null;
     }
 
     public static void main(String[] args) throws IOException {
